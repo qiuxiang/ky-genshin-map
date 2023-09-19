@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "scripts": {
+    "uno": "unocss -o dist/uno.css 'src/**/*.tsx' index.html",
+    "esbuild": "esbuild --bundle --minify --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
+    "build": "pnpm run esbuild && pnpm run uno",
+    "dev": "(pnpm run uno -w) & pnpm run esbuild --watch --sourcemap --serve --servedir=dist"
+  },
+  "dependencies": {
+    "@canvaskit-tilemap/core": "^0.0.1",
+    "@canvaskit-tilemap/react": "^0.0.1",
+    "preact": "^10.17.1",
+    "valtio": "^1.11.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "@unocss/cli": "^0.55.7",
+    "esbuild": "^0.19.3",
+    "unocss": "^0.55.7"
+  }
+}
