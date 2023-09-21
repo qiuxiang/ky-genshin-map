@@ -1,22 +1,29 @@
 {
   "private": true,
   "scripts": {
+    "proto": "grpc_tools_node_protoc --js_out=import_style=commonjs:. proto/data.proto && grpc_tools_node_protoc --plugin=protoc-gen-ts=node_modules/.bin/protoc-gen-ts --ts_out=grpc_js:. proto/data.proto",
     "uno": "unocss -o dist/uno.css 'src/**/*.tsx' index.html",
     "esbuild": "esbuild --bundle --minify --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
     "build": "pnpm run esbuild && pnpm run uno",
     "dev": "(pnpm run uno -w) & pnpm run esbuild --watch --sourcemap --serve --servedir=dist"
   },
   "dependencies": {
-    "@canvaskit-tilemap/core": "^0.0.1",
-    "@canvaskit-tilemap/react": "^0.0.1",
+    "@canvaskit-tilemap/core": "^0.1.0",
+    "@canvaskit-tilemap/react": "^0.1.0",
     "preact": "^10.17.1",
     "valtio": "^1.11.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.21",
+    "@types/google-protobuf": "^3.15.7",
+    "@types/node": "^20.6.3",
+    "@types/react": "^18.2.22",
     "@types/react-dom": "^18.2.7",
-    "@unocss/cli": "^0.55.7",
+    "@unocss/cli": "^0.56.0",
     "esbuild": "^0.19.3",
-    "unocss": "^0.55.7"
+    "google-protobuf": "^3.21.2",
+    "grpc-tools": "^1.12.4",
+    "grpc_tools_node_protoc_ts": "^5.3.3",
+    "sucrase": "^3.34.0",
+    "unocss": "^0.56.0"
   }
 }

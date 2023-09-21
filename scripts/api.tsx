@@ -5,55 +5,20 @@ class KyApi {
   accessToken = "";
   icons: Record<string, any> = {};
 
-  constructor() {
-    this.fetchIcons();
-  }
-
   async fetchIcons() {
     let { record } = await this.fetch("icon/get/list", { size: 1e3 });
     for (const i of record) {
       this.icons[i.name] = i;
     }
+    return this.icons;
   }
 
-  async fetchItems(params: { areaIdList: number[]; typeIdList: number[] }) {
+  async fetchItems(params: { areaIdList?: number[]; typeIdList?: number[] }) {
     const { record } = await this.fetch("item/get/list", {
       size: 1e3,
       ...params,
     });
     return record;
-  }
-
-  async fetchMarkers(params: { areaIdList: number[]; typeIdList: number[] }) {
-    const items = await this.fetchItems(params);
-    const allMarkers = await this.fetch("marker/get/list_byinfo", {
-      itemIdList: items.map((i: any) => i.id),
-    });
-    const markersMap: Record<string, any> = {};
-    for (const marker of allMarkers) {
-      const position = marker.position
-        .split(",")
-        .map((i: string) => parseFloat(i));
-      marker.coordinate = { x: position[0], y: position[1] };
-      const { iconTag } = marker.itemList[0];
-      const markers = markersMap[iconTag];
-      if (markers) {
-        markers.push(marker);
-      } else {
-        markersMap[iconTag] = [marker];
-      }
-    }
-    return Object.keys(markersMap).map((name) => {
-      const markers = markersMap[name];
-      return {
-        icon: this.icons[name].url,
-        items: markers.map((i: any) => ({
-          ...i.coordinate,
-          title: i.markerTitle,
-          content: i.content,
-        })),
-      };
-    });
   }
 
   async fetch(path: string, params: Record<string, any> = {}): Promise<any> {
@@ -83,16 +48,6 @@ class KyApi {
     );
     this.accessToken = (await response.json())["access_token"];
   }
-}
-
-export interface Marker {
-  icon: string;
-  items: MarkerItem[];
-}
-
-export interface MarkerItem extends core.MarkerItem {
-  title: string;
-  content: string;
 }
 
 export const api = new KyApi();
