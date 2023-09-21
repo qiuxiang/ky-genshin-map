@@ -3,6 +3,7 @@
     "strict": true,
     "target": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "paths": {

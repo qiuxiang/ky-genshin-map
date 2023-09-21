@@ -3,13 +3,14 @@
   "scripts": {
     "proto": "grpc_tools_node_protoc --js_out=import_style=commonjs:. proto/data.proto && grpc_tools_node_protoc --plugin=protoc-gen-ts=node_modules/.bin/protoc-gen-ts --ts_out=grpc_js:. proto/data.proto",
     "uno": "unocss -o dist/uno.css 'src/**/*.tsx' index.html",
-    "esbuild": "esbuild --bundle --minify --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
+    "esbuild": "esbuild --bundle --minify --loader:.png=file --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
     "build": "pnpm run esbuild && pnpm run uno",
     "dev": "(pnpm run uno -w) & pnpm run esbuild --watch --sourcemap --serve --servedir=dist"
   },
   "dependencies": {
     "@canvaskit-tilemap/core": "^0.1.0",
     "@canvaskit-tilemap/react": "^0.1.0",
+    "classnames": "^2.3.2",
     "google-protobuf": "^3.21.2",
     "preact": "^10.17.1",
     "valtio": "^1.11.2"
