@@ -5,7 +5,7 @@ import {
   Tilemap,
 } from "@canvaskit-tilemap/react";
 import { useEffect, useState } from "react";
-import { AreaItem, MapData, Marker } from "../proto/data_pb";
+import { MapData, Marker } from "./data_pb";
 
 export function Main() {
   const [loading, setLoading] = useState(true);
@@ -20,7 +20,7 @@ export function Main() {
       const markerMap = mapData.getMarkerMap();
       const markers = {} as Record<number, Marker[]>;
       for (const topArea of mapData.getAreaList()) {
-        for (const area of topArea.getChildrenList()) {
+        for (const area of topArea.getChildList()) {
           for (const itemId of area.getItemList()) {
             const areaItem = itemMap.get(itemId)!;
             if (areaItem.getTypeList()[0] != 5) {

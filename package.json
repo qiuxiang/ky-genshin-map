@@ -10,6 +10,7 @@
   "dependencies": {
     "@canvaskit-tilemap/core": "^0.1.0",
     "@canvaskit-tilemap/react": "^0.1.0",
+    "google-protobuf": "^3.21.2",
     "preact": "^10.17.1",
     "valtio": "^1.11.2"
   },
@@ -20,9 +21,6 @@
     "@types/react-dom": "^18.2.7",
     "@unocss/cli": "^0.56.0",
     "esbuild": "^0.19.3",
-    "google-protobuf": "^3.21.2",
-    "grpc-tools": "^1.12.4",
-    "grpc_tools_node_protoc_ts": "^5.3.3",
     "sucrase": "^3.34.0",
     "unocss": "^0.56.0"
   }
