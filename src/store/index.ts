@@ -10,6 +10,13 @@ export const store = proxy({
   activeAreaItems: proxySet<AreaItem>(),
   activeTopArea: null as unknown as Area,
   activeSubArea: null as unknown as Area,
+  isAreaPickerOpen: false,
+});
+
+document.body.addEventListener("click", ({ target }) => {
+  if ((target as HTMLElement).tagName == "CANVAS") {
+    closeAreaPicker();
+  }
 });
 
 export async function initStore() {
@@ -25,6 +32,14 @@ export function toggleDrawer() {
 
 export function closeDrawer() {
   store.drawerVisible = false;
+}
+
+export function toggleAreaPicker() {
+  store.isAreaPickerOpen = !store.isAreaPickerOpen;
+}
+
+export function closeAreaPicker() {
+  store.isAreaPickerOpen = false;
 }
 
 export function activateArea(area: Area) {
