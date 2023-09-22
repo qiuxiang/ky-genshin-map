@@ -75,7 +75,7 @@ function AreaItemTypes() {
       {Object.values(itemTypes)
         .filter((type) => areaItems[type.getId()]?.length > 0)
         .map((type) => (
-          <TypeItem itemType={type} />
+          <TypeItem key={type.getId()} itemType={type} />
         ))}
     </div>
   );
@@ -131,6 +131,7 @@ function AreaItems(props: { items: AreaItem[]; isSelected: boolean }) {
         return (
           <div
             className="text-xs"
+            key={i.getId()}
             style={{ background: active ? "#424b63" : "#f6f6f6" }}
             onClick={(event) => {
               event.stopPropagation();

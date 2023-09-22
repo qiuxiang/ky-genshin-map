@@ -11,16 +11,19 @@ const areaIcons: Record<string, string> = {
 };
 
 export function AreaPicker() {
-  const { activeTopArea, activeSubArea, mapData, isAreaPickerOpen } =
+  const { activeTopArea, activeSubArea, mapData, areaPickerVisible } =
     useSnapshot(store);
-  if (activeTopArea == null) return null;
+
+  if (activeTopArea == null) {
+    return null;
+  }
 
   return (
     <>
       <div
         className={classNames(
           "absolute h-16 md:h-20 flex items-center ease-out duration-300",
-          isAreaPickerOpen ? "opacity-0 -right-20" : "opacity-100 right-4"
+          areaPickerVisible ? "opacity-0 -right-20" : "opacity-100 right-4"
         )}
         onClick={toggleAreaPicker}
       >
@@ -49,7 +52,7 @@ export function AreaPicker() {
       <div
         className={classNames(
           "absolute w-full h-16 md:h-20 flex items-center justify-center ease-out duration-300",
-          isAreaPickerOpen
+          areaPickerVisible
             ? "top-0 opacity-100"
             : "-top-20 md:-top-16 opacity-0"
         )}
@@ -61,6 +64,7 @@ export function AreaPicker() {
         {mapData.getAreaList().map((topArea) => {
           return (
             <div
+              key={topArea.getName()}
               className="mx-2 relative w-11 h-11 md:w-14 md:h-14 flex justify-center items-center"
               onClick={() => {
                 activateArea(topArea);
@@ -82,26 +86,26 @@ export function AreaPicker() {
             </div>
           );
         })}
-        <div
-          className={classNames(
-            "absolute top-16 md:top-20 px-8 py-2 flex flex-wrap gap-2 justify-center",
-            !isAreaPickerOpen && "hidden"
-          )}
-        >
-          {activeTopArea.getChildList().map((subArea) => (
-            <div
-              className={classNames(
-                "py-0.5 px-4 rounded-full bg-black/50 text-white font-semibold text-sm border-1 border-solid hover:border-white ease-out duration-300",
-                activeSubArea == subArea ? "border-white" : "border-transparent"
-              )}
-              onClick={() => {
-                activateArea(subArea);
-              }}
-            >
-              {subArea.getName()}
-            </div>
-          ))}
-        </div>
+        {areaPickerVisible && (
+          <div className="absolute top-16 md:top-20 px-8 py-2 flex flex-wrap gap-2 justify-center">
+            {activeTopArea.getChildList().map((subArea) => (
+              <div
+                key={subArea.getName()}
+                className={classNames(
+                  "py-0.5 px-4 rounded-full bg-black/50 text-white font-semibold text-sm border-1 border-solid hover:border-white ease-out duration-300",
+                  activeSubArea == subArea
+                    ? "border-white"
+                    : "border-transparent"
+                )}
+                onClick={() => {
+                  activateArea(subArea);
+                }}
+              >
+                {subArea.getName()}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

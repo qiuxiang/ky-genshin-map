@@ -4,18 +4,21 @@ import { proxySet } from "valtio/utils";
 import { Area, AreaItem, MapData } from "../data_pb";
 
 export const store = proxy({
-  drawerVisible: false,
+  drawerVisible: window.innerWidth < 768 ? false : true,
   mapData: null as unknown as MapData,
   areaItems: {} as Record<string, AreaItem[]>,
   activeAreaItems: proxySet<AreaItem>(),
   activeTopArea: null as unknown as Area,
   activeSubArea: null as unknown as Area,
-  isAreaPickerOpen: false,
+  areaPickerVisible: false,
 });
 
 document.body.addEventListener("click", ({ target }) => {
   if ((target as HTMLElement).tagName == "CANVAS") {
     closeAreaPicker();
+    if (window.innerWidth < 768) {
+      closeDrawer();
+    }
   }
 });
 
@@ -35,11 +38,11 @@ export function closeDrawer() {
 }
 
 export function toggleAreaPicker() {
-  store.isAreaPickerOpen = !store.isAreaPickerOpen;
+  store.areaPickerVisible = !store.areaPickerVisible;
 }
 
 export function closeAreaPicker() {
-  store.isAreaPickerOpen = false;
+  store.areaPickerVisible = false;
 }
 
 export function activateArea(area: Area) {

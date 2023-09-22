@@ -12,6 +12,7 @@ function Main() {
   return (
     <>
       <GenshinMap />
+      <div className="absolute pointer-events-none top-0 w-full h-16 md:h-20 bg-gradient-to-b from-black/50 to-transparent" />
       <AreaPicker />
       <Drawer />
     </>
