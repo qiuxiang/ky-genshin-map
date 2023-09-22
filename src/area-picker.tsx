@@ -48,25 +48,25 @@ export function AreaPicker() {
             "linear-gradient(90deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.5) 50%,rgba(0,0,0,0) 100%)",
         }}
       >
-        {mapData.getAreaList().map((i) => {
+        {mapData.getAreaList().map((topArea) => {
           return (
             <div
               className="mx-2 relative w-11 h-11 md:w-14 md:h-14 flex justify-center items-center"
               onClick={() => {
-                activateArea(i);
+                activateArea(topArea);
               }}
             >
               <>
                 <img
                   className="w-full h-full absolute top-0 left-0 ease-out duration-300"
-                  src={`${i.getName()}.png`}
+                  src={`${topArea.getName()}.png`}
                 />
                 <div
                   className={classNames(
                     "absolute w-1/2 h-1/2 bg-white hover:opacity-100 duration-300 ease-out",
-                    activeTopArea == i ? "opacity-100" : "opacity-0"
+                    activeTopArea == topArea ? "opacity-100" : "opacity-0"
                   )}
-                  style={{ filter: "blur(12px)" }}
+                  style={{ filter: "blur(10px)" }}
                 />
               </>
             </div>
@@ -78,17 +78,17 @@ export function AreaPicker() {
             !isAreaPickerOpen && "hidden"
           )}
         >
-          {activeTopArea.getChildList().map((i) => (
+          {activeTopArea.getChildList().map((subArea) => (
             <div
               className={classNames(
-                "py-0.5 px-4 rounded-full bg-black/50 text-white font-semibold border-2 border-solid hover:border-white ease-out duration-300",
-                activeSubArea == i ? "border-white" : "border-transparent"
+                "py-0.5 px-4 rounded-full bg-black/50 text-white font-semibold text-sm border-1 border-solid hover:border-white ease-out duration-300",
+                activeSubArea == subArea ? "border-white" : "border-transparent"
               )}
               onClick={() => {
-                activateArea(i);
+                activateArea(subArea);
               }}
             >
-              {i.getName()}
+              {subArea.getName()}
             </div>
           ))}
         </div>

@@ -12,8 +12,8 @@ function Main() {
   return (
     <>
       <GenshinMap />
-      <Drawer />
       <AreaPicker />
+      <Drawer />
     </>
   );
 }
