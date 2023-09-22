@@ -41,7 +41,10 @@ export function AreaPicker() {
             </div>
           </div>
           <div className="text-yellow-400 font-semibold text-sm md:text-base">
-            当前选择 - {activeSubArea.getName()}
+            当前选择 -{" "}
+            {activeSubArea
+              ? activeSubArea.getName()
+              : `${activeTopArea.getName()}全地区`}
           </div>
         </div>
         <img

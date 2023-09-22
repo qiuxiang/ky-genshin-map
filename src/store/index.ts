@@ -1,16 +1,17 @@
 import { initCanvaskit } from "@canvaskit-tilemap/core/dist";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
-import { Area, AreaItem, MapData } from "../data_pb";
+import { Area, AreaItem, MapData, MapInfo } from "../data_pb";
 
 export const store = proxy({
   drawerVisible: window.innerWidth < 768 ? false : true,
   mapData: null as unknown as MapData,
-  areaItems: {} as Record<string, AreaItem[]>,
+  areaItems: {} as Record<string, Record<string, AreaItem[]>>,
   activeAreaItems: proxySet<AreaItem>(),
   activeTopArea: null as unknown as Area,
-  activeSubArea: null as unknown as Area,
+  activeSubArea: null as Area | null,
   areaPickerVisible: false,
+  mapInfo: null as unknown as MapInfo,
 });
 
 document.body.addEventListener("click", ({ target }) => {
@@ -27,6 +28,9 @@ export async function initStore() {
   const buffer = await response.arrayBuffer();
   store.mapData = ref(MapData.deserializeBinary(new Uint8Array(buffer)));
   activateArea(store.mapData.getAreaList()[0]);
+  store.mapInfo = ref(
+    store.mapData.getMapInfoMap().get(store.activeTopArea.getMapId())!
+  );
 }
 
 export function toggleDrawer() {
@@ -51,7 +55,7 @@ export function activateArea(area: Area) {
   for (const topArea of areaList) {
     if (topArea == area) {
       store.activeTopArea = ref(area);
-      store.activeSubArea = ref(area.getChildList()[0]);
+      store.activeSubArea = null;
       break;
     } else {
       const subArea = topArea.getChildList().find((i) => i == area);
@@ -62,29 +66,46 @@ export function activateArea(area: Area) {
       }
     }
   }
-  updateItems();
+  updateAreaItems();
 }
 
-function updateItems() {
+function updateAreaItems() {
   store.areaItems = {};
-  const itemMap = store.mapData.getItemMap();
-  for (const itemId of store.activeSubArea.getItemList()) {
-    const item = itemMap.get(itemId)!;
-    for (const typeId of item.getTypeList()) {
-      if (!store.areaItems[typeId]) {
-        store.areaItems[typeId] = [];
+  if (store.activeSubArea) {
+    updateSubAreaItems(store.activeSubArea);
+  } else {
+    for (const area of store.activeTopArea.getChildList()) {
+      if (area.getMapId() == store.activeTopArea.getMapId()) {
+        updateSubAreaItems(area);
       }
-      store.areaItems[typeId].push(ref(item));
     }
   }
 }
 
-export function toggleAreaItem(areaItem: AreaItem) {
-  if (store.activeAreaItems.has(areaItem)) {
-    store.activeAreaItems.delete(areaItem);
-  } else {
-    store.activeAreaItems.add(ref(areaItem));
+function updateSubAreaItems(subArea: Area) {
+  const itemMap = store.mapData.getItemMap();
+  const { areaItems } = store;
+  for (const itemId of subArea.getItemList()) {
+    const item = itemMap.get(itemId)!;
+    for (const typeId of item.getTypeList()) {
+      const icon = item.getIcon();
+      if (!areaItems[typeId]) {
+        areaItems[typeId] = {};
+      }
+      if (!areaItems[typeId][icon]) {
+        areaItems[typeId][icon] = [];
+      }
+      areaItems[typeId][icon].push(ref(item));
+    }
   }
+}
+
+export function activeAreaItem(areaItem: AreaItem) {
+  store.activeAreaItems.add(ref(areaItem));
+}
+
+export function removeAreaItem(areaItem: AreaItem) {
+  store.activeAreaItems.delete(ref(areaItem));
 }
 
 export function getMarkers(areaItem: AreaItem) {

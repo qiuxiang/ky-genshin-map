@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { proxy, ref, useSnapshot } from "valtio";
 import { proxySet } from "valtio/utils";
 import { AreaItem, ItemType } from "./data_pb";
-import { store, toggleAreaItem, toggleDrawer } from "./store";
+import { activeAreaItem, removeAreaItem, store, toggleDrawer } from "./store";
 
 const state = proxy({ selected: proxySet<ItemType>() });
 
@@ -73,7 +73,7 @@ function AreaItemTypes() {
       style={{ backgroundColor: "#f2f0eb" }}
     >
       {Object.values(itemTypes)
-        .filter((type) => areaItems[type.getId()]?.length > 0)
+        .filter((type) => areaItems[type.getId()])
         .map((type) => (
           <TypeItem key={type.getId()} itemType={type} />
         ))}
@@ -86,7 +86,7 @@ function TypeItem({ itemType }: { itemType: ItemType }) {
   const { selected } = useSnapshot(state);
   const isSelected = selected.has(itemType);
   const items = areaItems[itemType.getId()];
-  const height = 2.5 * Math.ceil(items.length / 2) + 0.5;
+  const height = 2.5 * Math.ceil(Object.keys(items).length / 2) + 0.5;
   return (
     <div
       className="m-2 p-2 bg-white rounded"
@@ -116,26 +116,36 @@ function TypeItem({ itemType }: { itemType: ItemType }) {
         style={{ height: `${isSelected ? height : 0}rem` }}
       >
         <div className="h-3" onClick={() => {}} />
-        <AreaItems items={items as AreaItem[]} isSelected={isSelected} />
+        <AreaItems
+          items={items as Record<string, AreaItem[]>}
+          isSelected={isSelected}
+        />
       </div>
     </div>
   );
 }
 
-function AreaItems(props: { items: AreaItem[]; isSelected: boolean }) {
+function AreaItems(props: {
+  items: Record<string, AreaItem[]>;
+  isSelected: boolean;
+}) {
   const { activeAreaItems } = useSnapshot(store);
   return (
     <div className="grid grid-cols-2 gap-1">
-      {props.items.map((i) => {
-        const active = activeAreaItems.has(i);
+      {Object.values(props.items).map((items) => {
+        const active = !items.some((i) => !activeAreaItems.has(i));
         return (
           <div
             className="text-xs"
-            key={i.getId()}
+            key={items[0].getId()}
             style={{ background: active ? "#424b63" : "#f6f6f6" }}
             onClick={(event) => {
               event.stopPropagation();
-              toggleAreaItem(i);
+              if (active) {
+                items.forEach(removeAreaItem);
+              } else {
+                items.forEach(activeAreaItem);
+              }
             }}
           >
             <div className="flex">
@@ -143,7 +153,7 @@ function AreaItems(props: { items: AreaItem[]; isSelected: boolean }) {
                 {props.isSelected && (
                   <img
                     className="w-7 h-7 object-contain"
-                    src={`icons/${i.getIcon()}`}
+                    src={`icons/${items[0].getIcon()}`}
                   />
                 )}
               </div>
@@ -154,9 +164,11 @@ function AreaItems(props: { items: AreaItem[]; isSelected: boolean }) {
                     active && "text-gray-200"
                   )}
                 >
-                  {i.getName()}
+                  {items[0].getName()}
                 </div>
-                <div className="text-gray-500">{i.getCount()}</div>
+                <div className="text-gray-500">
+                  {items.reduce((value, i) => value + i.getCount(), 0)}
+                </div>
               </div>
             </div>
           </div>
