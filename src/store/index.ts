@@ -83,3 +83,11 @@ export function toggleAreaItem(areaItem: AreaItem) {
     store.activeAreaItems.add(ref(areaItem));
   }
 }
+
+export function getMarkers(areaItem: AreaItem) {
+  const markerMap = store.mapData.getMarkerMap();
+  return areaItem
+    .getMarkerList()
+    .map((i) => markerMap.get(i))
+    .map((i) => ({ x: i!.getX(), y: i!.getY(), marker: i }));
+}

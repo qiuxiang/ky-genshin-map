@@ -1,7 +1,14 @@
 import classNames from "classnames";
 import { useSnapshot } from "valtio";
-import compassIcon from "../images/icon-compass.png";
 import { store, toggleAreaPicker, activateArea } from "./store";
+
+const areaIcons: Record<string, string> = {
+  蒙德: require("../images/mondstadt.png"),
+  璃月: require("../images/liyue.png"),
+  稻妻: require("../images/inazuma.png"),
+  须弥: require("../images/sumeru.png"),
+  枫丹: require("../images/fontaine.png"),
+};
 
 export function AreaPicker() {
   const { activeTopArea, activeSubArea, mapData, isAreaPickerOpen } =
@@ -20,7 +27,10 @@ export function AreaPicker() {
         <div className="flex-1 flex flex-col pt-1 mr-4 items-end justify-center">
           <div className="text-white flex items-center">
             <div className="rounded-full px-2 h-6 bg-black/50 mr-2 flex items-center">
-              <img className="w-5 md:h-5 mr-1" src={compassIcon} />
+              <img
+                className="w-5 md:h-5 mr-1"
+                src={require("../images/icon-compass.png")}
+              />
               <div className="leading-none text-sm">更换地区</div>
             </div>
             <div className="text-xl md:text-2xl font-semibold">
@@ -33,7 +43,7 @@ export function AreaPicker() {
         </div>
         <img
           className="w-12 h-12 md:w-16 md:h-16"
-          src={`${activeTopArea.getName()}.png`}
+          src={areaIcons[activeTopArea.getName()]}
         />
       </div>
       <div
@@ -59,7 +69,7 @@ export function AreaPicker() {
               <>
                 <img
                   className="w-full h-full absolute top-0 left-0 ease-out duration-300"
-                  src={`${topArea.getName()}.png`}
+                  src={areaIcons[topArea.getName()]}
                 />
                 <div
                   className={classNames(

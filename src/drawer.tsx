@@ -1,11 +1,6 @@
 import classNames from "classnames";
 import { proxy, ref, useSnapshot } from "valtio";
 import { proxySet } from "valtio/utils";
-import arrowImage from "../images/drawer-arrow.png";
-import bottomBackgroundImage from "../images/drawer-bg-bottom.png";
-import contentBackgroundImage from "../images/drawer-bg-content.png";
-import topBackgroundImage from "../images/drawer-bg-top.png";
-import buttonImage from "../images/drawer-button.png";
 import { AreaItem, ItemType } from "./data_pb";
 import { store, toggleAreaItem, toggleDrawer } from "./store";
 
@@ -21,12 +16,20 @@ export function Drawer() {
       }}
     >
       <ToggleButton />
-      <img className="w-full relative top-1" src={topBackgroundImage} />
+      <img
+        className="w-full relative top-1"
+        src={require("../images/drawer-bg-top.png")}
+      />
       <div
         className="flex-1"
-        style={{ background: `url(${contentBackgroundImage}) center / 100%` }}
+        style={{
+          background: `url(${require("../images/drawer-bg-content.png")}) center / 100%`,
+        }}
       />
-      <img className="w-full relative -top-1" src={bottomBackgroundImage} />
+      <img
+        className="w-full relative -top-1"
+        src={require("../images/drawer-bg-bottom.png")}
+      />
       <div className="absolute w-full h-full pt-2.5 pl-5 pr-3 pb-11 box-border">
         <div
           className="rounded w-60 mx-auto h-2.5 shadow relative top-1"
@@ -43,7 +46,9 @@ function ToggleButton() {
   return (
     <div
       className="absolute -z-10 top-2 -left-11 h-8 w-14 bg-contain bg-right bg-no-repeat"
-      style={{ backgroundImage: `url(${buttonImage})` }}
+      style={{
+        backgroundImage: `url(${require("../images/drawer-button.png")})`,
+      }}
       onClick={toggleDrawer}
     >
       <div
@@ -51,7 +56,9 @@ function ToggleButton() {
           "h-5 w-5 mt-1.5 ml-6 bg-cover duration-300 ease-out",
           !drawerVisible && "rotate-180"
         )}
-        style={{ backgroundImage: `url(${arrowImage})` }}
+        style={{
+          backgroundImage: `url(${require("../images/drawer-arrow.png")})`,
+        }}
       />
     </div>
   );

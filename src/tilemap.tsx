@@ -1,6 +1,6 @@
 import { MarkerLayer, TileLayer, Tilemap } from "@canvaskit-tilemap/react";
 import { useSnapshot } from "valtio";
-import { store } from "./store";
+import { getMarkers, store } from "./store";
 
 export function GenshinMap() {
   const { mapData, activeAreaItems } = useSnapshot(store);
@@ -21,18 +21,14 @@ export function GenshinMap() {
           return `https://assets.yuanshen.site/tiles_twt40/${z}/${x}_${y}.png`;
         }}
       />
-      {[...activeAreaItems.values()].map((i) => {
-        const markers = i
-          .getMarkerList()
-          .map((i) => markerMap.get(i))
-          .map((i) => ({ x: i!.getX(), y: i!.getY(), marker: i }));
+      {[...activeAreaItems.values()].map((areaItem) => {
         return (
-          <MarkerLayer items={markers} className="p-1">
+          <MarkerLayer items={getMarkers(areaItem)} className="p-1">
             <div className="w-6 h-6 shadow shadow-black flex justify-center items-center rounded-full border border-solid border-white bg-gray-700">
               <img
                 className="w-11/12 h-11/12 object-cover"
-                src={`icons/${i.getIcon()}`}
-                crossOrigin=""
+                src={`icons/${areaItem.getIcon()}`}
+                crossOrigin="anonymous"
               />
             </div>
           </MarkerLayer>
