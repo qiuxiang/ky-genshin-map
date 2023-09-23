@@ -40,7 +40,7 @@ export function AreaPicker() {
               {activeTopArea.getName()}
             </div>
           </div>
-          <div className="text-yellow-400 font-semibold text-sm md:text-base">
+          <div className="text-yellow-400 font-bold text-sm md:text-base">
             当前选择 -{" "}
             {activeSubArea
               ? activeSubArea.getName()
