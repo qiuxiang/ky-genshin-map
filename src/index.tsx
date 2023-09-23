@@ -19,5 +19,8 @@ function Main() {
   );
 }
 
+Neutralino.init();
+Neutralino.events.on("windowClose", () => Neutralino.app.exit());
+
 initStore();
 createRoot(document.getElementById("main")!).render(<Main />);
