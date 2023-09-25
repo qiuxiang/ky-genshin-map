@@ -2,12 +2,17 @@ import classNames from "classnames";
 import { useSnapshot } from "valtio";
 import { store, toggleAreaPicker, activateArea } from "./store";
 
-const areaIcons: Record<string, string> = {
-  蒙德: require("../images/mondstadt.png"),
-  璃月: require("../images/liyue.png"),
-  稻妻: require("../images/inazuma.png"),
-  须弥: require("../images/sumeru.png"),
-  枫丹: require("../images/fontaine.png"),
+interface AreaConfig {
+  icon: string;
+  color: string;
+}
+
+const areas: Record<string, AreaConfig> = {
+  蒙德: { icon: require("../images/mondstadt.png"), color: "#60fff5" },
+  璃月: { icon: require("../images/liyue.png"), color: "#ffdc60" },
+  稻妻: { icon: require("../images/inazuma.png"), color: "#9360ff" },
+  须弥: { icon: require("../images/sumeru.png"), color: "#afff60" },
+  枫丹: { icon: require("../images/fontaine.png"), color: "#52e5ff" },
 };
 
 export function AreaPicker() {
@@ -49,7 +54,7 @@ export function AreaPicker() {
         </div>
         <img
           className="w-12 h-12 md:w-16 md:h-16"
-          src={areaIcons[activeTopArea.getName()]}
+          src={areas[activeTopArea.getName()].icon}
         />
       </div>
       <div
@@ -76,14 +81,17 @@ export function AreaPicker() {
               <>
                 <img
                   className="w-full h-full absolute top-0 left-0 ease-out duration-300"
-                  src={areaIcons[topArea.getName()]}
+                  src={areas[topArea.getName()].icon}
                 />
                 <div
                   className={classNames(
                     "absolute w-1/2 h-1/2 bg-white hover:opacity-100 duration-300 ease-out",
                     activeTopArea == topArea ? "opacity-100" : "opacity-0"
                   )}
-                  style={{ filter: "blur(10px)" }}
+                  style={{
+                    filter: "blur(10px)",
+                    backgroundColor: areas[topArea.getName()].color,
+                  }}
                 />
               </>
             </div>

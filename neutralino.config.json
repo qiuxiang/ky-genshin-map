@@ -3,10 +3,7 @@
   "applicationId": "js.neutralino.sample",
   "version": "1.0.0",
   "defaultMode": "window",
-  "documentRoot": "/dist/",
-  "url": "/",
-  "enableServer": true,
-  "enableNativeAPI": true,
+  "port": 0,
   "logging": { "enabled": false },
   "modes": {
     "window": {
@@ -28,4 +25,3 @@
     "clientVersion": "3.11.0"
   }
 }
-
