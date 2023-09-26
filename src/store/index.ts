@@ -1,30 +1,18 @@
-import { initCanvaskit, Tilemap } from "@canvaskit-tilemap/core";
+import { initCanvaskit } from "@canvaskit-tilemap/core";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
 import { Area, AreaItem, MapData, MapInfo } from "../data_pb";
 
 export const store = proxy({
-  drawerVisible: window.innerWidth < 768 ? false : true,
   mapData: null as unknown as MapData,
   areaItems: {} as Record<string, Record<string, AreaItem[]>>,
   activeAreaItems: proxySet<AreaItem>(),
   activeTopArea: null as unknown as Area,
   activeSubArea: null as Area | null,
-  areaPickerVisible: false,
   mapInfo: null as unknown as MapInfo,
   undergroundEnabled: false,
   teleportVisible: true,
   markedVisible: false,
-  tilemap: null as Tilemap | null,
-});
-
-document.body.addEventListener("click", ({ target }) => {
-  if ((target as HTMLElement).tagName == "CANVAS") {
-    closeAreaPicker();
-    if (window.innerWidth < 768) {
-      closeDrawer();
-    }
-  }
 });
 
 export async function initStore() {
@@ -35,28 +23,6 @@ export async function initStore() {
   store.mapInfo = ref(
     store.mapData.getMapInfoMap().get(store.activeTopArea.getMapId())!
   );
-}
-
-export async function onTilemapReady(tilemap: Tilemap) {
-  store.tilemap = ref(tilemap);
-}
-
-export async function onTilemapMove() {}
-
-export function toggleDrawer() {
-  store.drawerVisible = !store.drawerVisible;
-}
-
-export function closeDrawer() {
-  store.drawerVisible = false;
-}
-
-export function toggleAreaPicker() {
-  store.areaPickerVisible = !store.areaPickerVisible;
-}
-
-export function closeAreaPicker() {
-  store.areaPickerVisible = false;
 }
 
 export function activateArea(area: Area) {

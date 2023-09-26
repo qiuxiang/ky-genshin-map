@@ -1,10 +1,10 @@
 import { createRoot } from "react-dom/client";
 import { useSnapshot } from "valtio";
-import { AreaPicker } from "./area-picker";
-import { Drawer } from "./drawer";
+import { AreaPicker, closeAreaPicker } from "./area-picker";
+import { closeDrawer, Drawer } from "./drawer";
+import { GenshinMap } from "./genshin-map";
 import { Settings } from "./settings";
 import { initStore, store } from "./store";
-import { GenshinMap } from "./tilemap";
 
 function Main() {
   const { mapData } = useSnapshot(store);
@@ -28,6 +28,15 @@ if (typeof Neutralino != "undefined") {
 
 document.addEventListener("contextmenu", (event) => {
   event.preventDefault();
+});
+
+document.body.addEventListener("click", ({ target }) => {
+  if ((target as HTMLElement).tagName == "CANVAS") {
+    closeAreaPicker();
+    if (window.innerWidth < 768) {
+      closeDrawer();
+    }
+  }
 });
 
 initStore();

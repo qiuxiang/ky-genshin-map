@@ -1,8 +1,8 @@
-import { MarkerItem } from "@canvaskit-tilemap/core/dist";
+import { MarkerItem } from "@canvaskit-tilemap/core";
 import { MarkerLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
-import { AreaItem } from "./data_pb";
-import { getMarkers } from "./store";
+import { AreaItem } from "../data_pb";
+import { getMarkers } from "../store";
 
 // navigator.userAgent.match(/version\/(\d+).+?safari/i);
 const isSafari = navigator.userAgent.indexOf("iPhone") != -1;
@@ -16,7 +16,13 @@ const teleportNames = [
 ];
 const borderless = [...teleportNames, "山洞洞口"];
 
-export function AreaItemLayer({ areaItem }: { areaItem: AreaItem }) {
+export function AreaItemLayer({
+  areaItem,
+  hidden = false,
+}: {
+  areaItem: AreaItem;
+  hidden?: boolean;
+}) {
   const allItems = getMarkers(areaItem);
   const normalItems = [];
   const undergroundItems = [];
@@ -33,9 +39,14 @@ export function AreaItemLayer({ areaItem }: { areaItem: AreaItem }) {
         <BorderlessMarkerLayer
           areaItem={areaItem}
           items={undergroundItems}
+          hidden={hidden}
           underground
         />
-        <BorderlessMarkerLayer areaItem={areaItem} items={normalItems} />
+        <BorderlessMarkerLayer
+          areaItem={areaItem}
+          items={normalItems}
+          hidden={hidden}
+        />
       </>
     );
   } else {
@@ -44,9 +55,14 @@ export function AreaItemLayer({ areaItem }: { areaItem: AreaItem }) {
         <NormalMarkerLayer
           areaItem={areaItem}
           items={undergroundItems}
+          hidden={hidden}
           underground
         />
-        <NormalMarkerLayer areaItem={areaItem} items={normalItems} />
+        <NormalMarkerLayer
+          areaItem={areaItem}
+          items={normalItems}
+          hidden={hidden}
+        />
       </>
     );
   }
@@ -56,15 +72,22 @@ interface MarkerLayerProps {
   areaItem: AreaItem;
   items: MarkerItem[];
   underground?: boolean;
+  hidden?: boolean;
   marked?: boolean;
 }
 
-function NormalMarkerLayer({ items, areaItem, underground }: MarkerLayerProps) {
+function NormalMarkerLayer({
+  items,
+  areaItem,
+  underground,
+  hidden,
+}: MarkerLayerProps) {
   return (
     <MarkerLayer
       items={items}
       className="p-1"
       cacheKey={`${areaItem.getId()}_${underground}`}
+      hidden={hidden}
     >
       <div
         className={classNames(
@@ -81,7 +104,7 @@ function NormalMarkerLayer({ items, areaItem, underground }: MarkerLayerProps) {
       {underground && (
         <img
           className="absolute w-3 h-3 bottom-0.5 right-0.5"
-          src={require("../images/icon-underground.png")}
+          src={require("../../images/icon-underground.png")}
         />
       )}
     </MarkerLayer>
@@ -92,12 +115,14 @@ function BorderlessMarkerLayer({
   items,
   areaItem,
   underground,
+  hidden,
 }: MarkerLayerProps) {
   return (
     <MarkerLayer
       items={items}
       anchor={[0, 1]}
       cacheKey={`${areaItem.getId()}_${underground}`}
+      hidden={hidden}
     >
       <div
         className={classNames(
@@ -114,7 +139,7 @@ function BorderlessMarkerLayer({
       {underground && (
         <img
           className="absolute w-3 h-3 bottom-0.5 right-0.5"
-          src={require("../images/icon-underground.png")}
+          src={require("../../images/icon-underground.png")}
         />
       )}
     </MarkerLayer>

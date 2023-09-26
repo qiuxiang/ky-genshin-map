@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import { useSnapshot } from "valtio";
-import { store, toggleAreaPicker, activateArea } from "./store";
+import { proxy, useSnapshot } from "valtio";
+import { activateArea, store } from "./store";
 
 interface AreaConfig {
   icon: string;
@@ -15,9 +15,19 @@ const areas: Record<string, AreaConfig> = {
   枫丹: { icon: require("../images/fontaine.png"), color: "#52e5ff" },
 };
 
+const state = proxy({ visible: false });
+
+function toggleAreaPicker() {
+  state.visible = !state.visible;
+}
+
+export function closeAreaPicker() {
+  state.visible = false;
+}
+
 export function AreaPicker() {
-  const { activeTopArea, activeSubArea, mapData, areaPickerVisible } =
-    useSnapshot(store);
+  const { activeTopArea, activeSubArea, mapData } = useSnapshot(store);
+  const { visible } = useSnapshot(state);
 
   if (activeTopArea == null) {
     return null;
@@ -28,7 +38,7 @@ export function AreaPicker() {
       <div
         className={classNames(
           "absolute h-16 md:h-20 flex items-center ease-out duration-300",
-          areaPickerVisible ? "opacity-0 -right-20" : "opacity-100 right-4"
+          visible ? "opacity-0 -right-20" : "opacity-100 right-4"
         )}
         onClick={toggleAreaPicker}
       >
@@ -60,9 +70,7 @@ export function AreaPicker() {
       <div
         className={classNames(
           "absolute w-full h-16 md:h-20 flex items-center justify-center ease-out duration-300",
-          areaPickerVisible
-            ? "top-0 opacity-100"
-            : "-top-20 md:-top-16 opacity-0"
+          visible ? "top-0 opacity-100" : "-top-20 md:-top-16 opacity-0"
         )}
         style={{
           background:
@@ -97,7 +105,7 @@ export function AreaPicker() {
             </div>
           );
         })}
-        {areaPickerVisible && (
+        {visible && (
           <div className="absolute top-16 md:top-20 px-8 py-2 flex flex-wrap gap-2 justify-center">
             {activeTopArea.getChildList().map((subArea) => (
               <div
