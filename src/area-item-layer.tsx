@@ -59,9 +59,13 @@ interface MarkerLayerProps {
   marked?: boolean;
 }
 
-function NormalMarkerLayer(props: MarkerLayerProps) {
+function NormalMarkerLayer({ items, areaItem, underground }: MarkerLayerProps) {
   return (
-    <MarkerLayer items={props.items} className="p-1">
+    <MarkerLayer
+      items={items}
+      className="p-1"
+      cacheKey={`${areaItem.getId()}_${underground}`}
+    >
       <div
         className={classNames(
           "w-6 h-6 flex justify-center items-center rounded-full border border-solid border-white bg-gray-700",
@@ -70,11 +74,11 @@ function NormalMarkerLayer(props: MarkerLayerProps) {
       >
         <img
           className="w-11/12 h-11/12 object-contain"
-          src={`icons/${props.areaItem.getIcon()}`}
+          src={`icons/${areaItem.getIcon()}`}
           crossOrigin="anonymous"
         />
       </div>
-      {props.underground && (
+      {underground && (
         <img
           className="absolute w-3 h-3 bottom-0.5 right-0.5"
           src={require("../images/icon-underground.png")}
@@ -84,22 +88,30 @@ function NormalMarkerLayer(props: MarkerLayerProps) {
   );
 }
 
-function BorderlessMarkerLayer(props: MarkerLayerProps) {
+function BorderlessMarkerLayer({
+  items,
+  areaItem,
+  underground,
+}: MarkerLayerProps) {
   return (
-    <MarkerLayer items={props.items} anchor={[0, 1]}>
+    <MarkerLayer
+      items={items}
+      anchor={[0, 1]}
+      cacheKey={`${areaItem.getId()}_${underground}`}
+    >
       <div
         className={classNames(
           "flex justify-center items-center",
-          props.areaItem.getName() == "七天神像" ? "w-8 h-8" : "w-7 h-7"
+          areaItem.getName() == "七天神像" ? "w-8 h-8" : "w-7 h-7"
         )}
       >
         <img
           className="w-full h-full object-contain"
-          src={`icons/${props.areaItem.getIcon()}`}
+          src={`icons/${areaItem.getIcon()}`}
           crossOrigin="anonymous"
         />
       </div>
-      {props.underground && (
+      {underground && (
         <img
           className="absolute w-3 h-3 bottom-0.5 right-0.5"
           src={require("../images/icon-underground.png")}

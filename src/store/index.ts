@@ -1,4 +1,4 @@
-import { initCanvaskit } from "@canvaskit-tilemap/core/dist";
+import { initCanvaskit, Tilemap } from "@canvaskit-tilemap/core";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
 import { Area, AreaItem, MapData, MapInfo } from "../data_pb";
@@ -12,6 +12,10 @@ export const store = proxy({
   activeSubArea: null as Area | null,
   areaPickerVisible: false,
   mapInfo: null as unknown as MapInfo,
+  undergroundEnabled: false,
+  teleportVisible: true,
+  markedVisible: false,
+  tilemap: null as Tilemap | null,
 });
 
 document.body.addEventListener("click", ({ target }) => {
@@ -32,6 +36,12 @@ export async function initStore() {
     store.mapData.getMapInfoMap().get(store.activeTopArea.getMapId())!
   );
 }
+
+export async function onTilemapReady(tilemap: Tilemap) {
+  store.tilemap = ref(tilemap);
+}
+
+export async function onTilemapMove() {}
 
 export function toggleDrawer() {
   store.drawerVisible = !store.drawerVisible;
@@ -114,4 +124,16 @@ export function getMarkers(areaItem: AreaItem) {
     .getMarkerList()
     .map((i) => markerMap.get(i))
     .map((i) => ({ x: i!.getX(), y: i!.getY(), marker: i }));
+}
+
+export function toggleMarkedVisible() {
+  store.markedVisible = !store.markedVisible;
+}
+
+export function toggleUnderground() {
+  store.undergroundEnabled = !store.undergroundEnabled;
+}
+
+export function toggleTeleport() {
+  store.teleportVisible = !store.teleportVisible;
 }
