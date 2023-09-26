@@ -19,8 +19,10 @@ function Main() {
   );
 }
 
-Neutralino.init();
-Neutralino.events.on("windowClose", () => Neutralino.app.exit());
+if (typeof Neutralino != "undefined") {
+  Neutralino.init();
+  Neutralino.events.on("windowClose", () => Neutralino.app.exit());
+}
 
 initStore();
 createRoot(document.getElementById("main")!).render(<Main />);

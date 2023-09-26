@@ -1,8 +1,11 @@
 import { MarkerItem } from "@canvaskit-tilemap/core/dist";
 import { MarkerLayer } from "@canvaskit-tilemap/react";
+import classNames from "classnames";
 import { AreaItem } from "./data_pb";
 import { getMarkers } from "./store";
 
+// navigator.userAgent.match(/version\/(\d+).+?safari/i);
+const isSafari = navigator.userAgent.indexOf("iPhone") != -1;
 const teleportNames = [
   "传送锚点",
   "七天神像",
@@ -59,7 +62,12 @@ interface MarkerLayerProps {
 function NormalMarkerLayer(props: MarkerLayerProps) {
   return (
     <MarkerLayer items={props.items} className="p-1">
-      <div className="w-6 h-6 drop-shadow-sm flex justify-center items-center rounded-full border border-solid border-white bg-gray-700">
+      <div
+        className={classNames(
+          "w-6 h-6 flex justify-center items-center rounded-full border border-solid border-white bg-gray-700",
+          isSafari ? "drop-shadow" : "drop-shadow-sm"
+        )}
+      >
         <img
           className="w-11/12 h-11/12 object-contain"
           src={`icons/${props.areaItem.getIcon()}`}
@@ -68,7 +76,7 @@ function NormalMarkerLayer(props: MarkerLayerProps) {
       </div>
       {props.underground && (
         <img
-          className="absolute w-4 h-4 bottom-0 right-0"
+          className="absolute w-3 h-3 bottom-0.5 right-0.5"
           src={require("../images/icon-underground.png")}
         />
       )}
@@ -78,8 +86,13 @@ function NormalMarkerLayer(props: MarkerLayerProps) {
 
 function BorderlessMarkerLayer(props: MarkerLayerProps) {
   return (
-    <MarkerLayer items={props.items}>
-      <div className="w-8 h-8 flex justify-center items-center">
+    <MarkerLayer items={props.items} anchor={[0, 1]}>
+      <div
+        className={classNames(
+          "flex justify-center items-center",
+          props.areaItem.getName() == "七天神像" ? "w-8 h-8" : "w-7 h-7"
+        )}
+      >
         <img
           className="w-full h-full object-contain"
           src={`icons/${props.areaItem.getIcon()}`}
@@ -88,7 +101,7 @@ function BorderlessMarkerLayer(props: MarkerLayerProps) {
       </div>
       {props.underground && (
         <img
-          className="absolute w-4 h-4 bottom-0 right-0"
+          className="absolute w-3 h-3 bottom-0.5 right-0.5"
           src={require("../images/icon-underground.png")}
         />
       )}

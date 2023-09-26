@@ -17,7 +17,7 @@ export function GenshinMap() {
         maxZoom={13}
         offset={[mapInfo.getTileOffsetX(), mapInfo.getTileOffsetY()]}
         getTileUrl={(x, y, z) => {
-          return `https://assets.yuanshen.site/tiles_twt40/${z}/${x}_${y}.png`;
+          return `https://assets.yuanshen.site/tiles_${mapInfo.getId()}/${z}/${x}_${y}.png`;
         }}
       />
       {[...activeAreaItems.values()].map((areaItem) => {
