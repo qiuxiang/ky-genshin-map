@@ -1,26 +1,26 @@
-import { Switch } from "./components/switch";
+import { Switch } from "../components/switch";
 import {
-  store,
+  state,
   toggleMarkedVisible,
-  toggleUnderground,
   toggleTeleport,
-} from "./store";
+  toggleUnderground,
+} from "./state";
 
 export function Settings() {
   return (
     <div className="absolute bottom-4 left-4 flex flex-col gap-1.5">
       <Switch
-        defaultValue={store.undergroundEnabled}
+        defaultValue={state.undergroundEnabled}
         label="地下地图"
         onChange={toggleUnderground}
       />
       <Switch
-        defaultValue={store.teleportVisible}
+        defaultValue={state.teleportVisible}
         label="传送点位"
         onChange={toggleTeleport}
       />
       <Switch
-        defaultValue={store.markedVisible}
+        defaultValue={state.markedVisible}
         label="标记点位"
         onChange={toggleMarkedVisible}
       />

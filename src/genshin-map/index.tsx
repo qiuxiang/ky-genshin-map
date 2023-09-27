@@ -2,6 +2,7 @@ import { TileLayer, Tilemap } from "@canvaskit-tilemap/react";
 import { useSnapshot } from "valtio";
 import { store } from "../store";
 import { AreaItemLayer } from "./area-item-layer";
+import { Settings } from "./settings";
 import { onTilemapMove, onTilemapReady } from "./state";
 import { TeleportLayer } from "./teleport-layer";
 
@@ -16,6 +17,7 @@ export function GenshinMap() {
       onMove={onTilemapMove}
       onReady={onTilemapReady}
     >
+      <Settings />
       <TileLayer
         minZoom={10}
         maxZoom={13}

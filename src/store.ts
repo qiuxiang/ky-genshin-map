@@ -1,18 +1,15 @@
 import { initCanvaskit } from "@canvaskit-tilemap/core";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
-import { Area, AreaItem, MapData, MapInfo } from "../data_pb";
+import { Area, AreaItem, MapData, MapInfo } from "./data_pb";
 
 export const store = proxy({
   mapData: null as unknown as MapData,
+  mapInfo: null as unknown as MapInfo,
   areaItems: {} as Record<string, Record<string, AreaItem[]>>,
   activeAreaItems: proxySet<AreaItem>(),
   activeTopArea: null as unknown as Area,
   activeSubArea: null as Area | null,
-  mapInfo: null as unknown as MapInfo,
-  undergroundEnabled: false,
-  teleportVisible: true,
-  markedVisible: false,
 });
 
 export async function initStore() {
@@ -82,24 +79,4 @@ export function activeAreaItem(areaItem: AreaItem) {
 
 export function removeAreaItem(areaItem: AreaItem) {
   store.activeAreaItems.delete(ref(areaItem));
-}
-
-export function getMarkers(areaItem: AreaItem) {
-  const markerMap = store.mapData.getMarkerMap();
-  return areaItem
-    .getMarkerList()
-    .map((i) => markerMap.get(i))
-    .map((i) => ({ x: i!.getX(), y: i!.getY(), marker: i }));
-}
-
-export function toggleMarkedVisible() {
-  store.markedVisible = !store.markedVisible;
-}
-
-export function toggleUnderground() {
-  store.undergroundEnabled = !store.undergroundEnabled;
-}
-
-export function toggleTeleport() {
-  store.teleportVisible = !store.teleportVisible;
 }

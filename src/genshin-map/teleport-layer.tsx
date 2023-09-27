@@ -5,7 +5,8 @@ import { AreaItemLayer } from "./area-item-layer";
 import { state } from "./state";
 
 export function TeleportLayer() {
-  const { mapInfo, teleportVisible, mapData } = useSnapshot(store);
+  const { mapInfo, mapData } = useSnapshot(store);
+  const { teleportVisible } = useSnapshot(state);
   const { zoom } = useSnapshot(state);
   const itemMap = mapData.getItemMap();
   const allTeleports = mapInfo.getTeleportList().map((i) => itemMap.get(i)!);

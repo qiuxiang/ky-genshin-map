@@ -29,12 +29,12 @@ export function Switch({
     >
       <div className="w-8 h-4 md:w-10 md:h-5 relative">
         <img
-          className={classNames("w-full absolute", value && "block")}
-          src={require("../../images/switch-on.png")}
-        />
-        <img
-          className={classNames("w-full absolute", value && "hidden")}
-          src={require("../../images/switch-off.png")}
+          className={classNames("w-full absolute")}
+          src={
+            value
+              ? require("../../images/switch-on.png")
+              : require("../../images/switch-off.png")
+          }
         />
       </div>
       <div
