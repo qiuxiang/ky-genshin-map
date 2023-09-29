@@ -14,96 +14,59 @@ const teleportNames = [
   "奖励秘境",
   "浪船锚点",
 ];
-const borderless = [...teleportNames, "山洞洞口"];
+const borderlessNames = [...teleportNames, "山洞洞口"];
 
-function getMarkers(areaItem: AreaItem) {
-  const markerMap = store.mapData.getMarkerMap();
-  return areaItem
-    .getMarkerList()
-    .map((i) => markerMap.get(i))
-    .map((i) => ({ x: i!.getX(), y: i!.getY(), marker: i }));
-}
-
-export function AreaItemLayer({
-  areaItem,
-  hidden = false,
-}: {
+interface AreaItemLayerProps {
   areaItem: AreaItem;
   hidden?: boolean;
-}) {
-  const allItems = getMarkers(areaItem);
-  const normalItems = [];
+}
+
+export function AreaItemLayer(props: AreaItemLayerProps) {
+  const items = [];
   const undergroundItems = [];
-  for (const item of allItems) {
+  for (const item of getMarkers(props.areaItem)) {
     if (item.marker?.getUnderground()) {
       undergroundItems.push(item);
     } else {
-      normalItems.push(item);
+      items.push(item);
     }
   }
-  if (borderless.includes(areaItem.getName())) {
-    return (
-      <>
-        {undergroundItems.length > 0 && (
-          <BorderlessMarkerLayer
-            areaItem={areaItem}
-            items={undergroundItems}
-            hidden={hidden}
-            underground
-          />
-        )}
-        {normalItems.length > 0 && (
-          <BorderlessMarkerLayer
-            areaItem={areaItem}
-            items={normalItems}
-            hidden={hidden}
-          />
-        )}
-      </>
-    );
-  } else {
-    return (
-      <>
-        {undergroundItems.length > 0 && (
-          <NormalMarkerLayer
-            areaItem={areaItem}
-            items={undergroundItems}
-            hidden={hidden}
-            underground
-          />
-        )}
-        {normalItems.length > 0 && (
-          <NormalMarkerLayer
-            areaItem={areaItem}
-            items={normalItems}
-            hidden={hidden}
-          />
-        )}
-      </>
-    );
+  const Component = borderlessNames.includes(props.areaItem.getName())
+    ? BorderlessMarkerLayer
+    : DefaultMarkerLayer;
+
+  function onClick(item: MarkerItem) {
+    console.log(item);
   }
+
+  const commonProps = { ...props, onClick };
+  return (
+    <>
+      {undergroundItems.length > 0 && (
+        <Component {...commonProps} items={undergroundItems} underground />
+      )}
+      {items.length > 0 && <Component {...commonProps} items={items} />}
+    </>
+  );
 }
 
-interface MarkerLayerProps {
-  areaItem: AreaItem;
+interface MarkerLayerProps extends AreaItemLayerProps {
   items: MarkerItem[];
   underground?: boolean;
-  hidden?: boolean;
   marked?: boolean;
+  onClick: (item: MarkerItem) => void;
 }
 
-function NormalMarkerLayer({
-  items,
+function DefaultMarkerLayer({
   areaItem,
   underground = false,
-  hidden,
+  ...props
 }: MarkerLayerProps) {
   return (
     <MarkerLayer
-      items={items}
+      {...props}
       className="p-1"
       cacheKey={`${areaItem.getName()}_${underground}`}
-      hidden={hidden}
     >
       <div
         className={classNames(
@@ -128,23 +91,21 @@ function NormalMarkerLayer({
 }
 
 function BorderlessMarkerLayer({
-  items,
   areaItem,
   underground = false,
-  hidden,
+  ...props
 }: MarkerLayerProps) {
   return (
     <MarkerLayer
-      items={items}
+      {...props}
       anchor={[0, 1]}
       cacheKey={`${areaItem.getName()}_${underground}`}
-      hidden={hidden}
       zIndex={10}
     >
       <div
         className={classNames(
           "flex justify-center items-center",
-          areaItem.getName() == "七天神像" ? "w-8 h-8" : "w-7 h-7"
+          areaItem.getName() == "七天神像" ? "w-9 h-9" : "w-7 h-7"
         )}
       >
         <img
@@ -161,4 +122,12 @@ function BorderlessMarkerLayer({
       )}
     </MarkerLayer>
   );
+}
+
+function getMarkers(areaItem: AreaItem) {
+  const markerMap = store.mapData.getMarkerMap();
+  return areaItem
+    .getMarkerList()
+    .map((i) => markerMap.get(i))
+    .map((i) => ({ x: i!.getX(), y: i!.getY(), marker: i }));
 }

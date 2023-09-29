@@ -3,7 +3,7 @@ import { useSnapshot } from "valtio";
 import { store } from "../store";
 import { AreaItemLayer } from "./area-item-layer";
 import { Settings } from "./settings";
-import { onTilemapMove, onTilemapReady } from "./state";
+import { onTilemapClick, onTilemapMove, onTilemapReady } from "./state";
 import { TeleportLayer } from "./teleport-layer";
 
 export function GenshinMap() {
@@ -16,6 +16,7 @@ export function GenshinMap() {
       maxZoom={1}
       onMove={onTilemapMove}
       onReady={onTilemapReady}
+      onClick={onTilemapClick}
     >
       <Settings />
       <TileLayer

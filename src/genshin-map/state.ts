@@ -1,4 +1,4 @@
-import { Tilemap } from "@canvaskit-tilemap/core";
+import { Tilemap, TilemapClickEvent } from "@canvaskit-tilemap/core";
 import { proxy, ref } from "valtio";
 
 export const state = proxy({
@@ -29,3 +29,5 @@ export function toggleUnderground() {
 export function toggleTeleport() {
   state.teleportVisible = !state.teleportVisible;
 }
+
+export function onTilemapClick(event: TilemapClickEvent) {}
