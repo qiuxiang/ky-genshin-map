@@ -1,4 +1,3 @@
-import { MarkerItem } from "@canvaskit-tilemap/core";
 import { MarkerLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
 import { useMemo } from "react";
@@ -22,10 +21,6 @@ const borderlessNames = [...teleportNames, "山洞洞口"];
 interface AreaItemLayerProps {
   areaItem: AreaItem;
   hidden?: boolean;
-}
-
-function onClick(item: MarkerItem) {
-  activateMarker(item as AreaItemMarker);
 }
 
 export const bottomCenterAnchor = [0, 1] as [number, number];
