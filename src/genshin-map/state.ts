@@ -1,5 +1,15 @@
-import { Tilemap, TilemapClickEvent } from "@canvaskit-tilemap/core";
+import {
+  MarkerItem,
+  Tilemap,
+  TilemapClickEvent,
+} from "@canvaskit-tilemap/core";
 import { proxy, ref } from "valtio";
+import { AreaItem, Marker } from "../data_pb";
+
+export interface AreaItemMarker extends MarkerItem {
+  marker: Marker;
+  areaItem: AreaItem;
+}
 
 export const state = proxy({
   tilemap: null as unknown as Tilemap,
@@ -7,6 +17,7 @@ export const state = proxy({
   undergroundEnabled: false,
   teleportVisible: true,
   markedVisible: false,
+  activeMarker: null as AreaItemMarker | null,
 });
 
 export async function onTilemapReady(tilemap: Tilemap) {
@@ -30,4 +41,12 @@ export function toggleTeleport() {
   state.teleportVisible = !state.teleportVisible;
 }
 
-export function onTilemapClick(event: TilemapClickEvent) {}
+export function onTilemapClick(event: TilemapClickEvent) {
+  if (!event.markerItem) {
+    state.activeMarker = null;
+  }
+}
+
+export function activateMarker(marker: AreaItemMarker) {
+  state.activeMarker = ref(marker);
+}

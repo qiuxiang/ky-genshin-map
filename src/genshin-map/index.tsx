@@ -1,9 +1,9 @@
-import { TileLayer, Tilemap } from "@canvaskit-tilemap/react";
+import { MarkerLayer, TileLayer, Tilemap } from "@canvaskit-tilemap/react";
 import { useSnapshot } from "valtio";
 import { store } from "../store";
-import { AreaItemLayer } from "./area-item-layer";
+import { AreaItemLayer, bottomCenterAnchor } from "./area-item-layer";
 import { Settings } from "./settings";
-import { onTilemapClick, onTilemapMove, onTilemapReady } from "./state";
+import { onTilemapClick, onTilemapMove, onTilemapReady, state } from "./state";
 import { TeleportLayer } from "./teleport-layer";
 
 export function GenshinMap() {
@@ -31,6 +31,34 @@ export function GenshinMap() {
         return <AreaItemLayer key={areaItem.getId()} areaItem={areaItem} />;
       })}
       <TeleportLayer />
+      <ActiveMarkerLayer />
     </Tilemap>
+  );
+}
+
+/**
+ * 渲染当前选中的点位
+ */
+function ActiveMarkerLayer() {
+  const { activeMarker } = useSnapshot(state);
+  const image = (
+    <img class="w-4 block" src={require("../../images/active-marker.png")} />
+  );
+  return (
+    <>
+      <MarkerLayer items={[]} cacheKey="activeMarker">
+        {image}
+      </MarkerLayer>
+      {activeMarker && (
+        <MarkerLayer
+          items={[activeMarker]}
+          anchor={bottomCenterAnchor}
+          zIndex={20}
+          cacheKey="activeMarker"
+        >
+          {image}
+        </MarkerLayer>
+      )}
+    </>
   );
 }

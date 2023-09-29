@@ -1,8 +1,11 @@
 import { MarkerItem } from "@canvaskit-tilemap/core";
 import { MarkerLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
+import { useMemo } from "react";
+import { useSnapshot } from "valtio";
 import { AreaItem } from "../data_pb";
 import { store } from "../store";
+import { activateMarker, AreaItemMarker, state } from "./state";
 
 // navigator.userAgent.match(/version\/(\d+).+?safari/i);
 const isSafari = navigator.userAgent.indexOf("iPhone") != -1;
@@ -21,25 +24,35 @@ interface AreaItemLayerProps {
   hidden?: boolean;
 }
 
+function onClick(item: MarkerItem) {
+  activateMarker(item as AreaItemMarker);
+}
+
+export const bottomCenterAnchor = [0, 1] as [number, number];
+
 export function AreaItemLayer(props: AreaItemLayerProps) {
-  const items = [];
-  const undergroundItems = [];
-  for (const item of getMarkers(props.areaItem)) {
-    if (item.marker?.getUnderground()) {
-      undergroundItems.push(item);
-    } else {
-      items.push(item);
+  const { activeMarker } = useSnapshot(state);
+  const [items, undergroundItems] = useMemo(() => {
+    const items = [];
+    const undergroundItems = [];
+    for (const item of getMarkers(props.areaItem)) {
+      if (item.marker == activeMarker?.marker) {
+        continue;
+      }
+      if (item.marker?.getUnderground()) {
+        undergroundItems.push(item);
+      } else {
+        items.push(item);
+      }
     }
-  }
+    return [items, undergroundItems];
+  }, [activeMarker?.areaItem == props.areaItem && activeMarker]);
+
+  const commonProps = { ...props, onClick: activateMarker };
   const Component = borderlessNames.includes(props.areaItem.getName())
     ? BorderlessMarkerLayer
     : DefaultMarkerLayer;
 
-  function onClick(item: MarkerItem) {
-    console.log(item);
-  }
-
-  const commonProps = { ...props, onClick };
   return (
     <>
       {undergroundItems.length > 0 && (
@@ -51,10 +64,10 @@ export function AreaItemLayer(props: AreaItemLayerProps) {
 }
 
 interface MarkerLayerProps extends AreaItemLayerProps {
-  items: MarkerItem[];
+  items: AreaItemMarker[];
   underground?: boolean;
   marked?: boolean;
-  onClick: (item: MarkerItem) => void;
+  onClick: (item: AreaItemMarker) => void;
 }
 
 function DefaultMarkerLayer({
@@ -98,9 +111,9 @@ function BorderlessMarkerLayer({
   return (
     <MarkerLayer
       {...props}
-      anchor={[0, 1]}
+      anchor={bottomCenterAnchor}
       cacheKey={`${areaItem.getName()}_${underground}`}
-      zIndex={10}
+      zIndex={areaItem.getName() == "七天神像" ? 11 : 10}
     >
       <div
         className={classNames(
@@ -124,10 +137,10 @@ function BorderlessMarkerLayer({
   );
 }
 
-function getMarkers(areaItem: AreaItem) {
+function getMarkers(areaItem: AreaItem): AreaItemMarker[] {
   const markerMap = store.mapData.getMarkerMap();
   return areaItem
     .getMarkerList()
     .map((i) => markerMap.get(i))
-    .map((i) => ({ x: i!.getX(), y: i!.getY(), marker: i }));
+    .map((i) => ({ x: i!.getX(), y: i!.getY(), marker: i!, areaItem }));
 }
