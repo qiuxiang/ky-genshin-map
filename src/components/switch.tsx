@@ -19,7 +19,7 @@ export function Switch({
     <div
       {...props}
       className={classNames(
-        "h:5 md:h-6 gap-2 flex items-center",
+        "gap-2 flex items-center justify-center",
         props.className as string
       )}
       onClick={() => {
@@ -27,9 +27,9 @@ export function Switch({
         onChange(!value);
       }}
     >
-      <div className="w-8 h-4 md:w-10 md:h-5 relative">
+      <div className="w-10 h-5 relative">
         <img
-          className={classNames("w-full absolute")}
+          className={classNames("h-full absolute")}
           src={
             value
               ? require("../../images/switch-on.png")
@@ -38,8 +38,8 @@ export function Switch({
         />
       </div>
       <div
-        className="text-white font-semibold text-xs md:text-base"
-        style={{ textShadow: "1px 1px 1px #000" }}
+        className="text-white text-sm font-semibold"
+        style={{ textShadow: "0 0 2px #000" }}
       >
         {label}
       </div>

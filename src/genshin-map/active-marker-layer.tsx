@@ -1,6 +1,7 @@
 import { DomLayer, MarkerLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
 import { useSnapshot } from "valtio";
+import { zIndex } from ".";
 import { bottomCenterAnchor } from "./area-item-layer";
 import { AreaItemMarker, mark, state, unmark } from "./state";
 
@@ -19,7 +20,7 @@ export function ActiveMarkerLayer() {
           <MarkerLayer
             items={[activeMarker]}
             anchor={bottomCenterAnchor}
-            zIndex={20}
+            zIndex={zIndex.activeMarker}
             cacheKey="activeMarker"
           >
             {image}

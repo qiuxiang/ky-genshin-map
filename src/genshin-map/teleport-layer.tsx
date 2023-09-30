@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useSnapshot } from "valtio";
 import { AreaItem } from "../data_pb";
 import { store } from "../store";
@@ -20,15 +21,21 @@ export function TeleportLayer() {
     }
   }
 
+  const statuesLayer = useMemo(() => {
+    return statues.map((i) => <AreaItemLayer key={i.getId()} areaItem={i} />);
+  }, []);
+
+  const teleportsLayer = useMemo(() => {
+    return teleports.map((i) => (
+      <AreaItemLayer key={i.getId()} areaItem={i} hidden={zoom < -3} />
+    ));
+  }, [zoom < -3]);
+
   if (teleportVisible) {
     return (
       <>
-        {statues.map((i) => (
-          <AreaItemLayer key={i.getId()} areaItem={i} />
-        ))}
-        {teleports.map((i) => (
-          <AreaItemLayer key={i.getId()} areaItem={i} hidden={zoom < -3} />
-        ))}
+        {statuesLayer}
+        {teleportsLayer}
       </>
     );
   }

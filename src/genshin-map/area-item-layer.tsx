@@ -2,6 +2,7 @@ import { MarkerLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
 import { useMemo } from "react";
 import { useSnapshot } from "valtio";
+import { zIndex } from ".";
 import { AreaItem } from "../data_pb";
 import { store } from "../store";
 import { activateMarker, AreaItemMarker, state } from "./state";
@@ -70,10 +71,15 @@ function DefaultMarkerLayer({
   underground = false,
   ...props
 }: MarkerLayerProps) {
+  const { undergroundEnabled } = useSnapshot(state);
+  if (undergroundEnabled && !underground) {
+    props.hidden = true;
+  }
   return (
     <MarkerLayer
       {...props}
       className="p-1"
+      zIndex={zIndex.marker}
       cacheKey={`${areaItem.getName()}_${underground}`}
     >
       <div
@@ -108,7 +114,9 @@ function BorderlessMarkerLayer({
       {...props}
       anchor={bottomCenterAnchor}
       cacheKey={`${areaItem.getName()}_${underground}`}
-      zIndex={areaItem.getName() == "七天神像" ? 11 : 10}
+      zIndex={
+        areaItem.getName() == "七天神像" ? zIndex.marker + 2 : zIndex.marker + 1
+      }
     >
       <div
         className={classNames(

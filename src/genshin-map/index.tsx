@@ -6,6 +6,13 @@ import { AreaItemLayer } from "./area-item-layer";
 import { Settings } from "./settings";
 import { onTilemapClick, onTilemapMove, onTilemapReady } from "./state";
 import { TeleportLayer } from "./teleport-layer";
+import { UndergroundLayer } from "./underground-layer";
+
+export const zIndex = {
+  underground: 10,
+  marker: 20,
+  activeMarker: 30,
+};
 
 export function GenshinMap() {
   const { activeAreaItems, mapInfo } = useSnapshot(store);
@@ -31,8 +38,9 @@ export function GenshinMap() {
       {[...activeAreaItems.values()].map((areaItem) => {
         return <AreaItemLayer key={areaItem.getId()} areaItem={areaItem} />;
       })}
-      <TeleportLayer />
       <ActiveMarkerLayer />
+      <UndergroundLayer />
+      <TeleportLayer />
     </Tilemap>
   );
 }
