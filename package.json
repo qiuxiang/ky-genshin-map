@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "uno": "unocss -o dist/uno.css 'src/**/*.tsx' index.html",
-    "esbuild": "esbuild --bundle --minify --loader:.png=file --alias:react-dom/client=preact/compat/client --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
+    "esbuild": "esbuild --bundle --minify --loader:.png=file --alias:react-dom=preact/compat --alias:react-dom/client=preact/compat/client --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
     "build": "pnpm run esbuild && pnpm run uno",
     "esbuild-dev": "pnpm run esbuild --watch --sourcemap --serve --servedir=dist",
     "dev": "(pnpm run uno -w) & pnpm run esbuild-dev"
@@ -15,6 +15,7 @@
     "classnames": "^2.3.2",
     "google-protobuf": "^3.21.2",
     "preact": "^10.17.1",
+    "react-transition-group": "^4.4.5",
     "valtio": "^1.11.2"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "@types/node": "^20.6.5",
     "@types/react": "^18.2.22",
     "@types/react-dom": "^18.2.7",
+    "@types/react-transition-group": "^4.4.7",
     "@unocss/cli": "^0.56.2",
     "esbuild": "^0.19.3",
     "sucrase": "^3.34.0",

@@ -2,10 +2,11 @@ import { canvaskit, Layer } from "@canvaskit-tilemap/core";
 import { CustomLayer, DomLayer, ImageLayer } from "@canvaskit-tilemap/react";
 import { Canvas } from "canvaskit-wasm";
 import classNames from "classnames";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
 import { zIndex } from ".";
 import { state, UndergroundMapOverlay } from "./state";
+import { Transition } from "react-transition-group";
 
 export function UndergroundLayer() {
   const { undergroundEnabled, undergroundMaps } = useSnapshot(state);
@@ -42,7 +43,6 @@ interface UndergroundMapProps {
 function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
   const { zoom } = useSnapshot(state);
   const [current, setCurrent] = useState(overlay.children[0]);
-
   const [x, y] = useMemo(() => {
     let x = Number.MIN_SAFE_INTEGER;
     let y = Number.MIN_SAFE_INTEGER;
@@ -79,34 +79,46 @@ function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
     });
   }, [current]);
 
+  const domLayerElement = useRef<HTMLDivElement>(null);
   return (
     <>
       {chunks}
       {overlay.children.length > 1 && (
-        <DomLayer
-          x={x}
-          y={y}
-          className={classNames(
-            "flex flex-col rounded-md overflow-hidden shadow-md duration-100 ease-out",
-            zoom > -3 ? "opacity-100" : "opacity-0"
-          )}
-        >
-          {overlay.children.map((i) => {
+        <Transition nodeRef={domLayerElement} in={zoom > -3} timeout={100}>
+          {(state) => {
+            console.log(state);
             return (
-              <div
-                className={classNames(
-                  "w-36 box-border overflow-hidden px-2 py-1 text-xs whitespace-nowrap text-ellipsis text-center",
-                  i == current ? "bg-blue-500 text-white" : "bg-white"
-                )}
-                onClick={() => {
-                  setCurrent(i);
-                }}
-              >
-                {i.label}
-              </div>
+              <DomLayer x={x} y={y}>
+                <div
+                  ref={domLayerElement}
+                  className={classNames(
+                    "flex flex-col rounded-md overflow-hidden shadow-md duration-100 ease-out",
+                    state == "entered" ? "opacity-100" : "opacity-0",
+                    state == "exited" ? "hidden h-0" : "block"
+                  )}
+                >
+                  {overlay.children.map((i) => {
+                    return (
+                      <div
+                        className={classNames(
+                          "w-36 box-border overflow-hidden px-2 py-1 text-xs whitespace-nowrap text-ellipsis text-center font-semibold",
+                          i == current
+                            ? "bg-yellow-500/80 text-white"
+                            : "bg-white/80"
+                        )}
+                        onClick={() => {
+                          setCurrent(i);
+                        }}
+                      >
+                        {i.label}
+                      </div>
+                    );
+                  })}
+                </div>
+              </DomLayer>
             );
-          })}
-        </DomLayer>
+          }}
+        </Transition>
       )}
     </>
   );

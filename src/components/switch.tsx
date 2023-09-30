@@ -39,7 +39,7 @@ export function Switch({
       </div>
       <div
         className="text-white text-sm font-semibold"
-        style={{ textShadow: "0 0 2px #000" }}
+        style={{ textShadow: "0 0 3px #000" }}
       >
         {label}
       </div>
