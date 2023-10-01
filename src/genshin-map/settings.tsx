@@ -16,12 +16,12 @@ export function Settings() {
       />
       <Switch
         defaultValue={state.teleportVisible}
-        label="传送点位"
+        label="传送点"
         onChange={toggleTeleport}
       />
       <Switch
         defaultValue={state.markedVisible}
-        label="标记点位"
+        label="已标记点位"
         onChange={toggleMarkedVisible}
       />
     </div>

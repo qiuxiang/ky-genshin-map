@@ -2,7 +2,7 @@ import { DomLayer, MarkerLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
 import { useSnapshot } from "valtio";
 import { zIndex } from ".";
-import { bottomCenterAnchor } from "./area-item-layer";
+import { borderlessNames, bottomCenterAnchor } from "./area-item-layer";
 import { AreaItemMarker, mark, state, unmark } from "./state";
 
 export function ActiveMarkerLayer() {
@@ -32,38 +32,42 @@ export function ActiveMarkerLayer() {
   );
 }
 
-function MarkerInfo({ marker, x, y }: AreaItemMarker) {
+function MarkerInfo({ marker, areaItem, x, y }: AreaItemMarker) {
+  areaItem.getRefreshTime();
   const { marked } = useSnapshot(state);
   let markButton = null;
-  // if (!areaItem.specialFlag && areaItem.defaultRefreshTime == 0) {
-  const buttonClass = "flex-1 rounded-full text-center border border-solid";
-  markButton = (
-    <div className="h-5 p-0.5 mt-1 rounded-full border border-yellow-900/50 border-solid flex">
-      <div
-        className={classNames(
-          buttonClass,
-          marked.has(marker.getId())
-            ? "border-transparent"
-            : "bg-yellow-900/40 border-yellow-900/60 text-white"
-        )}
-        onClick={() => unmark(marker)}
-      >
-        未完成
+  if (
+    !borderlessNames.includes(areaItem.getName()) &&
+    areaItem.getRefreshTime() == 0
+  ) {
+    const buttonClass = "flex-1 rounded-full text-center border border-solid";
+    markButton = (
+      <div className="h-5 p-0.5 mt-1 rounded-full border border-yellow-900/50 border-solid flex">
+        <div
+          className={classNames(
+            buttonClass,
+            marked.has(marker.getId())
+              ? "border-transparent"
+              : "bg-yellow-900/40 border-yellow-900/60 text-white"
+          )}
+          onClick={() => unmark(marker)}
+        >
+          未完成
+        </div>
+        <div
+          className={classNames(
+            buttonClass,
+            marked.has(marker.getId())
+              ? "bg-cyan-600/90 border-cyan-900/80 text-white"
+              : "border-transparent"
+          )}
+          onClick={() => mark(marker)}
+        >
+          已完成
+        </div>
       </div>
-      <div
-        className={classNames(
-          buttonClass,
-          marked.has(marker.getId())
-            ? "bg-cyan-600/90 border-cyan-900/80 text-white"
-            : "border-transparent"
-        )}
-        onClick={() => mark(marker)}
-      >
-        已完成
-      </div>
-    </div>
-  );
-  // }
+    );
+  }
   return (
     <DomLayer
       x={x}

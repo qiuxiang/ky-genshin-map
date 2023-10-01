@@ -17,7 +17,7 @@ const teleportNames = [
   "奖励秘境",
   "浪船锚点",
 ];
-const borderlessNames = [...teleportNames, "山洞洞口"];
+export const borderlessNames = [...teleportNames, "山洞洞口"];
 
 interface AreaItemLayerProps {
   areaItem: AreaItem;

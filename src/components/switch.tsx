@@ -19,7 +19,7 @@ export function Switch({
     <div
       {...props}
       className={classNames(
-        "gap-2 flex items-center justify-center",
+        "gap-2 flex items-center",
         props.className as string
       )}
       onClick={() => {
