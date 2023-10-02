@@ -75,13 +75,19 @@ export function activateMarker(marker: AreaItemMarker) {
 
 export function mark(marker: Marker) {
   state.marked.add(marker.getId());
+  localStorage.setItem("marked", JSON.stringify([...state.marked]));
 }
 
 export function unmark(marker: Marker) {
   state.marked.delete(marker.getId());
+  localStorage.setItem("marked", JSON.stringify([...state.marked]));
 }
 
 async function init() {
+  const marked = localStorage.getItem("marked");
+  if (marked) {
+    state.marked = proxySet(JSON.parse(marked));
+  }
   const response = await fetch("https://assets.yuanshen.site/web-map.json");
   const { plugins } = await response.json();
   state.undergroundMaps = ref(

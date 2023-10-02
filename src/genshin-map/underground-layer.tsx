@@ -129,7 +129,7 @@ class MaskLayer extends Layer {
 
   constructor() {
     super(zIndex.underground);
-    this._paint.setColor(canvaskit.Color(0, 0, 0, 0.5));
+    this._paint.setColor(canvaskit.Color(0, 0, 0, 0.7));
   }
 
   draw(canvas: Canvas) {

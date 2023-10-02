@@ -27,22 +27,33 @@ interface AreaItemLayerProps {
 export const bottomCenterAnchor = [0, 1] as [number, number];
 
 export function AreaItemLayer(props: AreaItemLayerProps) {
-  const { activeMarker } = useSnapshot(state);
-  const [items, undergroundItems] = useMemo(() => {
-    const items = [];
-    const undergroundItems = [];
-    for (const item of getMarkers(props.areaItem)) {
-      if (item.marker == activeMarker?.marker) {
-        continue;
+  const { activeMarker, marked, markedVisible } = useSnapshot(state);
+  const [items, undergroundItems, markedItems, markedUndergroundItems] =
+    useMemo(() => {
+      const items = [];
+      const undergroundItems = [];
+      const markedItems = [];
+      const markedUndergroundItems = [];
+      for (const item of getMarkers(props.areaItem)) {
+        if (item.marker == activeMarker?.marker) {
+          continue;
+        }
+        if (item.marker?.getUnderground()) {
+          if (marked.has(item.marker.getId())) {
+            markedUndergroundItems.push(item);
+          } else {
+            undergroundItems.push(item);
+          }
+        } else {
+          if (marked.has(item.marker.getId())) {
+            markedItems.push(item);
+          } else {
+            items.push(item);
+          }
+        }
       }
-      if (item.marker?.getUnderground()) {
-        undergroundItems.push(item);
-      } else {
-        items.push(item);
-      }
-    }
-    return [items, undergroundItems];
-  }, [activeMarker?.areaItem == props.areaItem && activeMarker]);
+      return [items, undergroundItems, markedItems, markedUndergroundItems];
+    }, [activeMarker?.areaItem == props.areaItem && activeMarker]);
 
   const commonProps = { ...props, onClick: activateMarker };
   const Component = borderlessNames.includes(props.areaItem.getName())
@@ -51,6 +62,17 @@ export function AreaItemLayer(props: AreaItemLayerProps) {
 
   return (
     <>
+      {markedVisible && markedUndergroundItems.length > 0 && (
+        <Component
+          {...commonProps}
+          items={markedUndergroundItems}
+          underground
+          marked
+        />
+      )}
+      {markedVisible && markedItems.length > 0 && (
+        <Component {...commonProps} items={markedItems} marked />
+      )}
       {undergroundItems.length > 0 && (
         <Component {...commonProps} items={undergroundItems} underground />
       )}
@@ -69,6 +91,7 @@ interface MarkerLayerProps extends AreaItemLayerProps {
 function DefaultMarkerLayer({
   areaItem,
   underground = false,
+  marked = false,
   ...props
 }: MarkerLayerProps) {
   const { undergroundEnabled } = useSnapshot(state);
@@ -78,15 +101,16 @@ function DefaultMarkerLayer({
   return (
     <MarkerLayer
       {...props}
-      className="p-1"
+      className={classNames("p-1", marked && "opacity-70")}
       anchor={bottomCenterAnchor}
       zIndex={zIndex.marker}
-      cacheKey={`${areaItem.getName()}_${underground}`}
+      cacheKey={`${areaItem.getName()}_${underground}_${marked}`}
     >
       <div
         className={classNames(
-          "w-6 h-6 flex justify-center items-center rounded-full border border-solid border-white bg-gray-700",
-          isSafari ? "drop-shadow" : "drop-shadow-sm"
+          "w-6 h-6 flex justify-center items-center rounded-full border border-solid bg-gray-700",
+          isSafari ? "drop-shadow" : "drop-shadow-sm",
+          marked ? "border-cyan-600/90" : "border-white"
         )}
       >
         <img
@@ -108,6 +132,7 @@ function DefaultMarkerLayer({
 function BorderlessMarkerLayer({
   areaItem,
   underground = false,
+  marked = false,
   ...props
 }: MarkerLayerProps) {
   return (
