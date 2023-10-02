@@ -79,6 +79,7 @@ function DefaultMarkerLayer({
     <MarkerLayer
       {...props}
       className="p-1"
+      anchor={bottomCenterAnchor}
       zIndex={zIndex.marker}
       cacheKey={`${areaItem.getName()}_${underground}`}
     >

@@ -65,6 +65,7 @@ export function toggleTeleport() {
 export function onTilemapClick(event: TilemapClickEvent) {
   if (!event.markerItem) {
     state.activeMarker = null;
+    console.log(event.coordinate);
   }
 }
 
