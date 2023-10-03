@@ -11,7 +11,7 @@ export function Settings() {
     <div className="absolute z-10 bottom-4 left-4 flex flex-col gap-1.5">
       <Switch
         defaultValue={state.undergroundEnabled}
-        label="地下地图"
+        label="分层地图"
         onChange={toggleUnderground}
       />
       <Switch

@@ -1,35 +1,63 @@
-import { canvaskit, Layer } from "@canvaskit-tilemap/core";
-import { CustomLayer, DomLayer, ImageLayer } from "@canvaskit-tilemap/react";
-import { Canvas } from "canvaskit-wasm";
+import { DomLayer, ImageLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
 import { useMemo, useRef, useState } from "react";
+import { Transition } from "react-transition-group";
 import { useSnapshot } from "valtio";
 import { zIndex } from ".";
-import { state, UndergroundMapOverlay } from "./state";
-import { Transition } from "react-transition-group";
+import { MaskLayer } from "./mask-layer";
+import { state, UndergroundMap, UndergroundMapOverlay } from "./state";
 
 export function UndergroundLayer() {
-  const { undergroundEnabled, undergroundMaps } = useSnapshot(state);
-  if (!undergroundEnabled) {
-    return null;
+  const { undergroundEnabled, undergroundMaps, activeMarker } =
+    useSnapshot(state);
+
+  // 手动开启的全局分层地图
+  if (undergroundEnabled) {
+    return (
+      <>
+        <MaskLayer />
+        {undergroundMaps.flatMap(({ overlays, urlTemplate }) => {
+          return overlays.map((i) => {
+            return (
+              <UndergroundMap
+                key={i.label}
+                overlay={i as UndergroundMapOverlay}
+                urlTemplate={urlTemplate}
+              />
+            );
+          });
+        })}
+      </>
+    );
   }
 
-  return (
-    <>
-      <CustomLayer createLayer={() => new MaskLayer()} />
-      {undergroundMaps.flatMap(({ overlays, urlTemplate }) => {
-        return overlays.map((i) => {
-          return (
-            <UndergroundMap
-              key={i.label}
-              overlay={i as UndergroundMapOverlay}
-              urlTemplate={urlTemplate}
-            />
-          );
-        });
-      })}
-    </>
-  );
+  // 由当前选中点点位触发的分层地图
+  const underground = activeMarker?.marker.getUnderground();
+  if (underground) {
+    let undergroundMap: UndergroundMap | null = null;
+    let overlay: UndergroundMapOverlay | null = null;
+    for (const map of undergroundMaps) {
+      overlay = map.overlays.find((i) =>
+        i.children.find((i) => i.value == underground)
+      ) as UndergroundMapOverlay;
+      if (overlay) {
+        undergroundMap = map as UndergroundMap;
+        break;
+      }
+    }
+    if (overlay && undergroundMap) {
+      return (
+        <>
+          <MaskLayer />
+          <UndergroundMap
+            overlay={overlay}
+            urlTemplate={undergroundMap.urlTemplate}
+          />
+        </>
+      );
+    }
+  }
+  return null;
 }
 
 interface UndergroundMapProps {
@@ -130,17 +158,4 @@ function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
       )}
     </>
   );
-}
-
-class MaskLayer extends Layer {
-  _paint = new canvaskit.Paint();
-
-  constructor() {
-    super({ zIndex: zIndex.underground });
-    this._paint.setColor(canvaskit.Color(0, 0, 0, 0.7));
-  }
-
-  draw(canvas: Canvas) {
-    canvas.drawRect(this.tilemap.visibleRect, this._paint);
-  }
 }
