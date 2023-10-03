@@ -2,6 +2,7 @@ import { canvaskit } from "@canvaskit-tilemap/core";
 import { TextLayer } from "@canvaskit-tilemap/react";
 import { useSnapshot } from "valtio";
 import { zIndex } from ".";
+import { store } from "../store";
 import { state } from "./state";
 
 const areaNames = [
@@ -14,6 +15,13 @@ const areaNames = [
 
 export function AreaNamesLayer() {
   const { zoom } = useSnapshot(state);
+  const { activeSubArea, activeTopArea } = useSnapshot(store);
+
+  // 只在提瓦特大陆显示地名
+  if (activeSubArea && activeSubArea.getMapId() != activeTopArea.getMapId()) {
+    return null;
+  }
+
   const style = {
     textStyle: {
       color: canvaskit.WHITE,
@@ -26,6 +34,7 @@ export function AreaNamesLayer() {
     <>
       {areaNames1.map((i) => (
         <TextLayer
+          key={i.name}
           x={i.x}
           y={i.y}
           text={i.name}
