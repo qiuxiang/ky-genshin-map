@@ -3,6 +3,7 @@ import { useSnapshot } from "valtio";
 import { store } from "../store";
 import { ActiveMarkerLayer } from "./active-marker-layer";
 import { AreaItemLayer } from "./area-item-layer";
+import { AreaNamesLayer } from "./area-names-layer";
 import { Settings } from "./settings";
 import { onTilemapClick, onTilemapMove, onTilemapReady } from "./state";
 import { TeleportLayer } from "./teleport-layer";
@@ -41,6 +42,7 @@ export function GenshinMap() {
       <ActiveMarkerLayer />
       <UndergroundLayer />
       <TeleportLayer />
+      <AreaNamesLayer />
     </Tilemap>
   );
 }
