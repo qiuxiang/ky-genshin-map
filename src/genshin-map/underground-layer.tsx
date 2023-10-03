@@ -17,19 +17,16 @@ export function UndergroundLayer() {
   return (
     <>
       <CustomLayer createLayer={() => new MaskLayer()} />
-      {undergroundMaps.map(({ overlays, urlTemplate }) => {
-        return (
-          <>
-            {overlays.map((i) => {
-              return (
-                <UndergroundMap
-                  overlay={i as UndergroundMapOverlay}
-                  urlTemplate={urlTemplate}
-                />
-              );
-            })}
-          </>
-        );
+      {undergroundMaps.flatMap(({ overlays, urlTemplate }) => {
+        return overlays.map((i) => {
+          return (
+            <UndergroundMap
+              key={i.label}
+              overlay={i as UndergroundMapOverlay}
+              urlTemplate={urlTemplate}
+            />
+          );
+        });
       })}
     </>
   );
@@ -42,7 +39,7 @@ interface UndergroundMapProps {
 
 function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
   const { zoom } = useSnapshot(state);
-  const [current, setCurrent] = useState(overlay.children[0]);
+  const [current, setCurrent] = useState<UndergroundMapOverlay | null>(null);
   const [x, y] = useMemo(() => {
     let x = Number.MIN_SAFE_INTEGER;
     let y = Number.MIN_SAFE_INTEGER;
@@ -57,36 +54,35 @@ function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
     return [x, y];
   }, []);
 
-  const chunks = useMemo(() => {
-    if (!current.chunks) {
-      return null;
-    }
-    return current.chunks.map((i) => {
-      const image = new Image();
-      image.src = i.url ?? urlTemplate.replace("{{chunkValue}}", i.value);
-      image.crossOrigin = "";
-      if (!i.bounds) {
-        return null;
-      }
-      return (
-        <ImageLayer
-          key={current.label}
-          zIndex={zIndex.underground}
-          image={image}
-          bounds={i.bounds.flat()}
-        />
-      );
-    });
-  }, [current]);
-
   const domLayerElement = useRef<HTMLDivElement>(null);
   return (
     <>
-      {chunks}
+      {overlay.children.flatMap((i) => {
+        const { chunks, label } = i;
+        if (!chunks) {
+          return null;
+        }
+        return chunks.map(({ value, bounds, url }) => {
+          const image = new Image();
+          image.src = url ?? urlTemplate.replace("{{chunkValue}}", value);
+          image.crossOrigin = "";
+          if (!bounds) {
+            return null;
+          }
+          return (
+            <ImageLayer
+              key={label}
+              zIndex={zIndex.underground + (i == current ? 2 : 0)}
+              image={image}
+              bounds={bounds.flat()}
+              opacity={current == null || i == current ? 1 : 0.3}
+            />
+          );
+        });
+      })}
       {overlay.children.length > 1 && (
         <Transition nodeRef={domLayerElement} in={zoom > -3} timeout={100}>
           {(state) => {
-            console.log(state);
             return (
               <DomLayer x={x} y={y}>
                 <div
@@ -100,6 +96,7 @@ function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
                   {overlay.children.map((i) => {
                     return (
                       <div
+                        key={i.label}
                         className={classNames(
                           "w-36 box-border overflow-hidden px-2 py-1 text-xs whitespace-nowrap text-ellipsis text-center font-semibold",
                           i == current
@@ -107,7 +104,11 @@ function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
                             : "bg-white/80"
                         )}
                         onClick={() => {
-                          setCurrent(i);
+                          if (i == current) {
+                            setCurrent(null);
+                          } else {
+                            setCurrent(i);
+                          }
                         }}
                       >
                         {i.label}
@@ -128,7 +129,7 @@ class MaskLayer extends Layer {
   _paint = new canvaskit.Paint();
 
   constructor() {
-    super(zIndex.underground);
+    super({ zIndex: zIndex.underground });
     this._paint.setColor(canvaskit.Color(0, 0, 0, 0.7));
   }
 
