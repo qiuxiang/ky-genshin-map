@@ -38,6 +38,9 @@ interface UndergroundMapProps {
 }
 
 function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
+  if (overlay.label == "大枫丹湖" && overlay.children.length == 4) {
+    overlay.children.shift();
+  }
   const { zoom } = useSnapshot(state);
   const [current, setCurrent] = useState<UndergroundMapOverlay | null>(null);
   const [x, y] = useMemo(() => {
@@ -54,32 +57,36 @@ function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
     return [x, y];
   }, []);
 
+  const chunks = useMemo(() => {
+    return overlay.children.flatMap((i) => {
+      const { chunks, label } = i;
+      if (!chunks) {
+        return null;
+      }
+      return chunks.map(({ value, bounds, url }) => {
+        const image = new Image();
+        image.src = url ?? urlTemplate.replace("{{chunkValue}}", value);
+        image.crossOrigin = "";
+        if (!bounds) {
+          return null;
+        }
+        return (
+          <ImageLayer
+            key={label}
+            zIndex={zIndex.underground + (i == current ? 1 : 0)}
+            image={image}
+            bounds={bounds.flat()}
+            opacity={current == null || i == current ? 1 : 0.3}
+          />
+        );
+      });
+    });
+  }, [current]);
+
   const domLayerElement = useRef<HTMLDivElement>(null);
   return (
     <>
-      {overlay.children.flatMap((i) => {
-        const { chunks, label } = i;
-        if (!chunks) {
-          return null;
-        }
-        return chunks.map(({ value, bounds, url }) => {
-          const image = new Image();
-          image.src = url ?? urlTemplate.replace("{{chunkValue}}", value);
-          image.crossOrigin = "";
-          if (!bounds) {
-            return null;
-          }
-          return (
-            <ImageLayer
-              key={label}
-              zIndex={zIndex.underground + (i == current ? 2 : 0)}
-              image={image}
-              bounds={bounds.flat()}
-              opacity={current == null || i == current ? 1 : 0.3}
-            />
-          );
-        });
-      })}
+      {chunks}
       {overlay.children.length > 1 && (
         <Transition nodeRef={domLayerElement} in={zoom > -3} timeout={100}>
           {(state) => {

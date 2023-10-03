@@ -19,6 +19,7 @@ export function GenshinMap() {
   const { activeAreaItems, mapInfo } = useSnapshot(store);
   return (
     <Tilemap
+      key={mapInfo.getId()}
       className="absolute w-full h-full"
       mapSize={[mapInfo.getWidth(), mapInfo.getHeight()]}
       origin={[mapInfo.getOriginX(), mapInfo.getOriginY()]}

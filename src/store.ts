@@ -35,6 +35,11 @@ export function activateArea(area: Area) {
       if (subArea) {
         store.activeTopArea = ref(topArea);
         store.activeSubArea = ref(area);
+        const mapId = area.getMapId();
+        if (store.mapInfo.getId() != mapId) {
+          store.mapInfo = ref(store.mapData.getMapInfoMap().get(mapId)!);
+          store.activeAreaItems = proxySet();
+        }
         break;
       }
     }

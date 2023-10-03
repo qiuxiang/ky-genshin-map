@@ -32,7 +32,7 @@ export function AreaNamesLayer() {
           fontUrl="location.otf"
           hidden={zoom > -4}
           style={style}
-          zIndex={zIndex.underground + 1}
+          zIndex={zIndex.underground + 2}
         />
       ))}
     </>
