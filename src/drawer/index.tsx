@@ -1,4 +1,6 @@
+import classNames from "classnames";
 import { useSnapshot } from "valtio";
+import { isApp } from "../store";
 import { AreaItemTypes } from "./area-item-types";
 import { state } from "./state";
 import { ToggleButton } from "./toggle-button";
@@ -8,7 +10,12 @@ export function Drawer() {
   const { visible } = useSnapshot(state);
   return (
     <div
-      className="flex flex-col w-72 h-[calc(100%-4rem)] md:h-[calc(100%-5rem)] absolute top-16 md:top-20 right-2 duration-300 ease-out"
+      className={classNames(
+        "flex flex-col w-72 absolute top-16 md:top-20 right-2 duration-300 ease-out",
+        isApp
+          ? "h-[calc(100%-4rem-24px)] md:h-[calc(100%-5rem-24px)] mt-[24px]"
+          : "h-[calc(100%-4rem)] md:h-[calc(100%-5rem)]"
+      )}
       style={{
         transform: `translate(${visible ? 0 : 276}px, 0)`,
       }}

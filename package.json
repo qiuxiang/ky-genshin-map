@@ -16,7 +16,8 @@
     "google-protobuf": "^3.21.2",
     "preact": "^10.17.1",
     "react-transition-group": "^4.4.5",
-    "valtio": "^1.11.2"
+    "valtio": "^1.11.2",
+    "whatwg-fetch": "^3.6.19"
   },
   "devDependencies": {
     "@types/google-protobuf": "^3.15.7",

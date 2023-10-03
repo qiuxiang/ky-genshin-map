@@ -3,6 +3,7 @@ import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
 import { Area, AreaItem, MapData, MapInfo } from "./data_pb";
 
+export const isApp = navigator.userAgent.includes("app");
 export const store = proxy({
   mapData: null as unknown as MapData,
   mapInfo: null as unknown as MapInfo,
@@ -12,7 +13,7 @@ export const store = proxy({
   activeSubArea: null as Area | null,
 });
 
-export async function initStore() {
+async function init() {
   const [response] = await Promise.all([fetch("data.bin"), initCanvaskit()]);
   const buffer = await response.arrayBuffer();
   store.mapData = ref(MapData.deserializeBinary(new Uint8Array(buffer)));
@@ -21,6 +22,8 @@ export async function initStore() {
     store.mapData.getMapInfoMap().get(store.activeTopArea.getMapId())!
   );
 }
+
+init();
 
 export function activateArea(area: Area) {
   const areaList = store.mapData.getAreaList();
@@ -84,10 +87,10 @@ function updateSubAreaItems(subArea: Area) {
   }
 }
 
-export function activeAreaItem(areaItem: AreaItem) {
+export function activateAreaItem(areaItem: AreaItem) {
   store.activeAreaItems.add(ref(areaItem));
 }
 
-export function removeAreaItem(areaItem: AreaItem) {
+export function inactivateAreaItem(areaItem: AreaItem) {
   store.activeAreaItems.delete(ref(areaItem));
 }

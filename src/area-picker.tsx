@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { proxy, useSnapshot } from "valtio";
-import { activateArea, store } from "./store";
+import { activateArea, isApp, store } from "./store";
 
 interface AreaConfig {
   icon: string;
@@ -37,8 +37,15 @@ export function AreaPicker() {
     <>
       <div
         className={classNames(
+          "absolute pointer-events-none w-full h-16 md:h-20 bg-gradient-to-b from-black/50 to-transparent",
+          isApp && "pt-[24px]"
+        )}
+      />
+      <div
+        className={classNames(
           "absolute h-16 md:h-20 flex items-center ease-out duration-300",
-          visible ? "opacity-0 -right-20" : "opacity-100 right-4"
+          visible ? "opacity-0 -right-20" : "opacity-100 right-4",
+          isApp && "pt-[24px]"
         )}
         onClick={toggleAreaPicker}
       >
@@ -73,7 +80,8 @@ export function AreaPicker() {
       <div
         className={classNames(
           "absolute w-full h-16 md:h-20 flex items-center justify-center ease-out duration-300",
-          visible ? "top-0 opacity-100" : "-top-20 md:-top-16 opacity-0"
+          visible ? "top-0 opacity-100" : "-top-20 md:-top-16 opacity-0",
+          isApp && "pt-[24px]"
         )}
         style={{
           background:
@@ -109,7 +117,12 @@ export function AreaPicker() {
           );
         })}
         {visible && (
-          <div className="absolute top-16 md:top-20 px-8 py-2 flex flex-wrap gap-2 justify-center">
+          <div
+            className={classNames(
+              "absolute top-16 md:top-20 px-8 py-2 flex flex-wrap gap-2 justify-center",
+              isApp && "mt-[24px]"
+            )}
+          >
             {activeTopArea.getChildList().map((subArea) => (
               <div
                 key={subArea.getName()}

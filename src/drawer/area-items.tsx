@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useSnapshot } from "valtio";
 import { AreaItem } from "../data_pb";
-import { activeAreaItem, removeAreaItem, store } from "../store";
+import { activateAreaItem, inactivateAreaItem, store } from "../store";
 export { closeDrawer } from "./state";
 
 export function AreaItems(props: {
@@ -21,9 +21,9 @@ export function AreaItems(props: {
             onClick={(event) => {
               event.stopPropagation();
               if (active) {
-                items.forEach(removeAreaItem);
+                items.forEach(inactivateAreaItem);
               } else {
-                items.forEach(activeAreaItem);
+                items.forEach(activateAreaItem);
               }
             }}
           >
