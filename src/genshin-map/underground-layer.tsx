@@ -4,28 +4,22 @@ import { useMemo, useRef, useState } from "react";
 import { Transition } from "react-transition-group";
 import { useSnapshot } from "valtio";
 import { zIndex } from ".";
+import { UndergroundMap } from "../data_pb";
+import { store } from "../store";
 import { MaskLayer } from "./mask-layer";
-import { state, UndergroundMap, UndergroundMapOverlay } from "./state";
+import { state } from "./state";
 
 export function UndergroundLayer() {
-  const { undergroundEnabled, undergroundMaps, activeMarker } =
-    useSnapshot(state);
+  const { undergroundEnabled, activeMarker } = useSnapshot(state);
+  const { mapData } = useSnapshot(store);
 
   // 手动开启的全局分层地图
   if (undergroundEnabled) {
     return (
       <>
         <MaskLayer />
-        {undergroundMaps.flatMap(({ overlays, urlTemplate }) => {
-          return overlays.map((i) => {
-            return (
-              <UndergroundMap
-                key={i.label}
-                overlay={i as UndergroundMapOverlay}
-                urlTemplate={urlTemplate}
-              />
-            );
-          });
+        {mapData.getUndergroundMapList().map((i) => {
+          return <UndergroundMapItem key={i.getId()} undergroundMap={i} />;
         })}
       </>
     );
@@ -35,31 +29,21 @@ export function UndergroundLayer() {
   const underground = activeMarker?.marker.getUnderground();
   if (underground) {
     let undergroundMap: UndergroundMap | undefined;
-    let overlay: UndergroundMapOverlay | undefined;
-    let current: UndergroundMapOverlay | undefined;
-    for (const map of undergroundMaps) {
-      for (const topOverlay of map.overlays) {
-        current = topOverlay.children.find(
-          (i) => i.value == underground
-        ) as UndergroundMapOverlay;
-        if (current) {
-          overlay = topOverlay as UndergroundMapOverlay;
-          undergroundMap = map as UndergroundMap;
-          break;
-        }
-      }
+    let current: UndergroundMap | undefined;
+    for (const item of mapData.getUndergroundMapList()) {
+      const current = item.getChildList().find((i) => i.getId() == underground);
       if (current) {
+        undergroundMap = item;
         break;
       }
     }
-    if (overlay && undergroundMap) {
+    if (undergroundMap) {
       return (
         <>
           <MaskLayer />
-          <UndergroundMap
+          <UndergroundMapItem
             key={underground}
-            overlay={overlay}
-            urlTemplate={undergroundMap.urlTemplate}
+            undergroundMap={undergroundMap}
             current={current}
           />
         </>
@@ -70,53 +54,41 @@ export function UndergroundLayer() {
 }
 
 interface UndergroundMapProps {
-  overlay: UndergroundMapOverlay;
-  urlTemplate: string;
-  current?: UndergroundMapOverlay;
+  undergroundMap: UndergroundMap;
+  current?: UndergroundMap;
 }
 
-function UndergroundMap(props: UndergroundMapProps) {
-  const { overlay, urlTemplate } = props;
-  if (overlay.label == "大枫丹湖" && overlay.children.length == 4) {
-    overlay.children.shift();
-  }
+function UndergroundMapItem(props: UndergroundMapProps) {
+  const { undergroundMap } = props;
   const { zoomLevel } = useSnapshot(state);
-  const [current, setCurrent] = useState<UndergroundMapOverlay | undefined>(
+  const [current, setCurrent] = useState<UndergroundMap | undefined>(
     props.current
   );
   const [x, y] = useMemo(() => {
     let x = Number.MIN_SAFE_INTEGER;
     let y = Number.MIN_SAFE_INTEGER;
-    for (const { chunks } of overlay.children) {
-      for (const { bounds } of chunks ?? []) {
-        if (bounds) {
-          x = Math.max(x, bounds[1][0]);
-          y = Math.max(y, bounds[1][1]);
-        }
+    for (const child of undergroundMap.getChildList()) {
+      for (const chunk of child.getChunkList()) {
+        const bounds = chunk.getBoundList();
+        x = Math.max(x, bounds[2]);
+        y = Math.max(y, bounds[3]);
       }
     }
     return [x, y];
   }, []);
 
   const chunks = useMemo(() => {
-    return overlay.children.flatMap((i) => {
-      const { chunks, label } = i;
-      if (!chunks) {
-        return null;
-      }
-      return chunks.map(({ value, bounds, url }) => {
+    return undergroundMap.getChildList().map((i) => {
+      return i.getChunkList().map((chunk, index) => {
         const image = new Image();
-        image.src = url ?? urlTemplate.replace("{{chunkValue}}", value);
+        image.src = `underground/${i.getId()}_${index}.webp`;
         image.crossOrigin = "";
-        if (!bounds) {
-          return null;
-        }
         return (
           <ImageLayer
-            key={label}
+            key={image.src}
             zIndex={zIndex.underground + (i == current ? 1 : 0)}
             image={image}
-            bounds={bounds.flat()}
+            bounds={chunk.getBoundList()}
             opacity={current == null || i == current ? 1 : 0.3}
           />
         );
@@ -128,7 +100,7 @@ function UndergroundMap(props: UndergroundMapProps) {
   return (
     <>
       {chunks}
-      {overlay.children.length > 1 && (
+      {undergroundMap.getChildList().length > 1 && (
         <Transition nodeRef={domLayerElement} in={zoomLevel > -3} timeout={100}>
           {(state) => {
             return (
@@ -141,10 +113,10 @@ function UndergroundMap(props: UndergroundMapProps) {
                     state == "exited" ? "hidden h-0" : "block"
                   )}
                 >
-                  {overlay.children.map((i) => {
+                  {undergroundMap.getChildList().map((i) => {
                     return (
                       <div
-                        key={i.label}
+                        key={i.getId()}
                         className={classNames(
                           "w-36 box-border overflow-hidden px-2 py-1 text-xs whitespace-nowrap text-ellipsis text-center font-semibold",
                           i == current
@@ -159,7 +131,7 @@ function UndergroundMap(props: UndergroundMapProps) {
                           }
                         }}
                       >
-                        {i.label}
+                        {i.getName()}
                       </div>
                     );
                   })}
