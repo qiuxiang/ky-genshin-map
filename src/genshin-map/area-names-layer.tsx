@@ -14,7 +14,7 @@ const areaNames = [
 ];
 
 export function AreaNamesLayer() {
-  const { zoom } = useSnapshot(state);
+  const { zoomLevel } = useSnapshot(state);
   const { activeSubArea, activeTopArea } = useSnapshot(store);
 
   // 只在提瓦特大陆显示地名
@@ -39,7 +39,7 @@ export function AreaNamesLayer() {
           y={i.y}
           text={i.name}
           fontUrl="location.otf"
-          hidden={zoom > -4}
+          hidden={zoomLevel > -4}
           style={style}
           zIndex={zIndex.underground + 2}
         />

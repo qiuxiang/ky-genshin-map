@@ -32,7 +32,7 @@ export interface UndergroundMap {
 
 export const state = proxy({
   tilemap: null as unknown as Tilemap,
-  zoom: 0,
+  zoomLevel: 0,
   undergroundEnabled: false,
   teleportVisible: true,
   markedVisible: false,
@@ -47,7 +47,7 @@ export async function onTilemapReady(tilemap: Tilemap) {
 }
 
 export async function onTilemapMove() {
-  state.zoom = Math.floor(state.tilemap!.zoom);
+  state.zoomLevel = Math.floor(state.tilemap!.zoom);
 }
 
 export function toggleMarkedVisible() {

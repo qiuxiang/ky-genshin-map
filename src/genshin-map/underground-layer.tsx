@@ -34,14 +34,21 @@ export function UndergroundLayer() {
   // 由当前选中点点位触发的分层地图
   const underground = activeMarker?.marker.getUnderground();
   if (underground) {
-    let undergroundMap: UndergroundMap | null = null;
-    let overlay: UndergroundMapOverlay | null = null;
+    let undergroundMap: UndergroundMap | undefined;
+    let overlay: UndergroundMapOverlay | undefined;
+    let current: UndergroundMapOverlay | undefined;
     for (const map of undergroundMaps) {
-      overlay = map.overlays.find((i) =>
-        i.children.find((i) => i.value == underground)
-      ) as UndergroundMapOverlay;
-      if (overlay) {
-        undergroundMap = map as UndergroundMap;
+      for (const topOverlay of map.overlays) {
+        current = topOverlay.children.find(
+          (i) => i.value == underground
+        ) as UndergroundMapOverlay;
+        if (current) {
+          overlay = topOverlay as UndergroundMapOverlay;
+          undergroundMap = map as UndergroundMap;
+          break;
+        }
+      }
+      if (current) {
         break;
       }
     }
@@ -50,8 +57,10 @@ export function UndergroundLayer() {
         <>
           <MaskLayer />
           <UndergroundMap
+            key={underground}
             overlay={overlay}
             urlTemplate={undergroundMap.urlTemplate}
+            current={current}
           />
         </>
       );
@@ -63,14 +72,18 @@ export function UndergroundLayer() {
 interface UndergroundMapProps {
   overlay: UndergroundMapOverlay;
   urlTemplate: string;
+  current?: UndergroundMapOverlay;
 }
 
-function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
+function UndergroundMap(props: UndergroundMapProps) {
+  const { overlay, urlTemplate } = props;
   if (overlay.label == "大枫丹湖" && overlay.children.length == 4) {
     overlay.children.shift();
   }
-  const { zoom } = useSnapshot(state);
-  const [current, setCurrent] = useState<UndergroundMapOverlay | null>(null);
+  const { zoomLevel } = useSnapshot(state);
+  const [current, setCurrent] = useState<UndergroundMapOverlay | undefined>(
+    props.current
+  );
   const [x, y] = useMemo(() => {
     let x = Number.MIN_SAFE_INTEGER;
     let y = Number.MIN_SAFE_INTEGER;
@@ -116,7 +129,7 @@ function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
     <>
       {chunks}
       {overlay.children.length > 1 && (
-        <Transition nodeRef={domLayerElement} in={zoom > -3} timeout={100}>
+        <Transition nodeRef={domLayerElement} in={zoomLevel > -3} timeout={100}>
           {(state) => {
             return (
               <DomLayer x={x} y={y}>
@@ -140,7 +153,7 @@ function UndergroundMap({ overlay, urlTemplate }: UndergroundMapProps) {
                         )}
                         onClick={() => {
                           if (i == current) {
-                            setCurrent(null);
+                            setCurrent(undefined);
                           } else {
                             setCurrent(i);
                           }
