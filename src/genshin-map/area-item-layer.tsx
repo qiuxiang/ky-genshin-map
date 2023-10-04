@@ -7,8 +7,7 @@ import { AreaItem } from "../data_pb";
 import { store } from "../store";
 import { activateMarker, AreaItemMarker, state } from "./state";
 
-// navigator.userAgent.match(/version\/(\d+).+?safari/i);
-const isSafari = navigator.userAgent.indexOf("iPhone") != -1;
+const isSafari = navigator.userAgent.includes("iPhone");
 const teleportNames = [
   "传送锚点",
   "七天神像",

@@ -38,7 +38,7 @@ export function AreaNamesLayer() {
           x={i.x}
           y={i.y}
           text={i.name}
-          fontUrl="location.otf"
+          fontUrl={require("../../images/font.otf")}
           hidden={zoomLevel > -4}
           style={style}
           zIndex={zIndex.underground + 2}

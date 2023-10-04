@@ -1,3 +1,4 @@
+// android webview 需要用 file:// 加载文件, 但 fetch 不支持, xhr 实现的 fetch 可以绕过
 const { fetch } = require("whatwg-fetch");
 window.fetch = fetch;
 

@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "uno": "unocss -o dist/uno.css 'src/**/*.tsx' index.html",
-    "esbuild": "esbuild --bundle --minify --loader:.png=file --alias:react-dom=preact/compat --alias:react-dom/client=preact/compat/client --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
+    "esbuild": "esbuild --bundle --minify --loader:.png=file --loader:.otf=file --alias:react-dom=preact/compat --alias:react-dom/client=preact/compat/client --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
     "build": "pnpm run esbuild && pnpm run uno",
     "esbuild-dev": "pnpm run esbuild --watch --sourcemap --serve --servedir=dist",
     "dev": "(pnpm run uno -w) & pnpm run esbuild-dev"

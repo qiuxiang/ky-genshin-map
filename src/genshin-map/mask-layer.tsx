@@ -4,7 +4,7 @@ import { Canvas } from "canvaskit-wasm";
 import { zIndex } from ".";
 
 /**
- * 黑色透明遮罩层
+ * 黑色半透明遮罩层
  */
 class _MaskLayer extends Layer {
   _paint = new canvaskit.Paint();
