@@ -5,7 +5,8 @@ import {
 } from "@canvaskit-tilemap/core";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
-import { AreaItem, Marker } from "../data_pb";
+import { AreaItem, Marker, UndergroundMap } from "../data_pb";
+import { store } from "../store";
 
 export interface AreaItemMarker extends MarkerItem {
   marker: Marker;
@@ -16,6 +17,7 @@ export const state = proxy({
   tilemap: null as unknown as Tilemap,
   zoomLevel: 0,
   undergroundEnabled: false,
+  activeUndergroundMap: null as UndergroundMap | null,
   teleportVisible: true,
   markedVisible: false,
   activeMarker: null as AreaItemMarker | null,
@@ -46,12 +48,25 @@ export function toggleTeleport() {
 export function onTilemapClick(event: TilemapClickEvent) {
   if (!event.markerItem) {
     state.activeMarker = null;
-    console.log(event.coordinate);
+    state.activeUndergroundMap = null;
+    console.log("onClick", event.coordinate);
   }
 }
 
 export function activateMarker(marker: AreaItemMarker) {
   state.activeMarker = ref(marker);
+  const underground = marker?.marker.getUnderground();
+  if (underground) {
+    for (const item of store.mapData.getUndergroundMapList()) {
+      const active = item.getChildList().find((i) => i.getId() == underground);
+      if (active) {
+        state.activeUndergroundMap = ref(active);
+        break;
+      }
+    }
+  } else {
+    state.activeUndergroundMap = null;
+  }
 }
 
 export function mark(marker: Marker) {

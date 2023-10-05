@@ -10,7 +10,7 @@ import { MaskLayer } from "./mask-layer";
 import { state } from "./state";
 
 export function UndergroundLayer() {
-  const { undergroundEnabled, activeMarker } = useSnapshot(state);
+  const { undergroundEnabled, activeUndergroundMap } = useSnapshot(state);
   const { mapData } = useSnapshot(store);
 
   // 手动开启的全局分层地图
@@ -26,25 +26,18 @@ export function UndergroundLayer() {
   }
 
   // 由当前选中点点位触发的分层地图
-  const underground = activeMarker?.marker.getUnderground();
-  if (underground) {
-    let undergroundMap: UndergroundMap | undefined;
-    let current: UndergroundMap | undefined;
-    for (const item of mapData.getUndergroundMapList()) {
-      const current = item.getChildList().find((i) => i.getId() == underground);
-      if (current) {
-        undergroundMap = item;
-        break;
-      }
-    }
+  if (activeUndergroundMap) {
+    let undergroundMap = mapData
+      .getUndergroundMapList()
+      .find((i) => i.getChildList().find((i) => i == activeUndergroundMap));
     if (undergroundMap) {
       return (
         <>
           <MaskLayer />
           <UndergroundMapItem
-            key={underground}
+            key={activeUndergroundMap.getId()}
             undergroundMap={undergroundMap}
-            current={current}
+            current={activeUndergroundMap}
           />
         </>
       );
@@ -60,7 +53,7 @@ interface UndergroundMapProps {
 
 function UndergroundMapItem(props: UndergroundMapProps) {
   const { undergroundMap } = props;
-  const { zoomLevel } = useSnapshot(state);
+  const { zoomLevel, activeUndergroundMap } = useSnapshot(state);
   const [current, setCurrent] = useState<UndergroundMap | undefined>(
     props.current
   );
@@ -101,7 +94,11 @@ function UndergroundMapItem(props: UndergroundMapProps) {
     <>
       {chunks}
       {undergroundMap.getChildList().length > 1 && (
-        <Transition nodeRef={domLayerElement} in={zoomLevel > -3} timeout={100}>
+        <Transition
+          nodeRef={domLayerElement}
+          in={zoomLevel > -3 || activeUndergroundMap != null}
+          timeout={100}
+        >
           {(state) => {
             return (
               <DomLayer x={x} y={y}>
