@@ -14,7 +14,10 @@ function Main() {
   if (!mapData) {
     return (
       <div className="w-full h-full bg-white flex justify-center items-center">
-        <img src={require("../images/splash.jpg")} />
+        <img
+          className="max-w-xs md:max-w-md"
+          src={require("../images/splash.jpg")}
+        />
       </div>
     );
   }
