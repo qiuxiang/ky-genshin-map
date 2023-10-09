@@ -1,0 +1,19 @@
+name: build
+on: [push]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          wget https://github.com/qiuxiang/genshin-maps/files/12844845/data.tar.gz
+          tar xf data.tar.gz
+          cp dist/data_pb.* src/
+          mv index.html dist/
+      - run: npm i
+      - run: npm run build
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
