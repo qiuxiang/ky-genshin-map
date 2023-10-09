@@ -11,7 +11,13 @@ import { store } from "./store";
 
 function Main() {
   const { mapData } = useSnapshot(store);
-  if (!mapData) return null;
+  if (!mapData) {
+    return (
+      <div className="w-full h-full bg-white flex justify-center items-center">
+        <img src={require("../images/splash.jpg")} />
+      </div>
+    );
+  }
 
   return (
     <>
