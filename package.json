@@ -8,8 +8,8 @@
     "dev": "(pnpm run uno -w) & pnpm run esbuild-dev"
   },
   "dependencies": {
-    "@canvaskit-tilemap/core": "^0.3.0",
-    "@canvaskit-tilemap/react": "^0.3.0",
+    "@canvaskit-tilemap/core": "^0.4.0",
+    "@canvaskit-tilemap/react": "^0.4.0",
     "@neutralinojs/lib": "^3.12.0",
     "canvaskit-wasm": "^0.38.2",
     "classnames": "^2.3.2",
