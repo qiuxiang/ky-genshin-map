@@ -12,8 +12,9 @@ jobs:
           tar xf data.tar.gz
           cp dist/data_pb.* src/
           mv index.html dist/
-      - run: npm i
-      - run: npm run build
+          corepack enable
+      - run: pnpm i
+      - run: pnpm run build
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
