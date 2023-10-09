@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="uno.css" />
+    <style>
+      html,
+      body {
+        overscroll-behavior: none;
+      }
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      :root {
+        --un-drop-shadow-color: rgba(0, 0, 0, 0.5);
+      }
+      .marker:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid rgb(255 247 237);
+        bottom: -9px;
+        left: 50%;
+        margin-left: -10px;
+      }
+    </style>
+  </head>
+  <body class="select-none font-sans text-gray-700 m-0">
+    <main class="fixed w-full h-full bg-gray-900 z-10" id="main"></main>
+    <script src="index.js"></script>
+  </body>
+</html>

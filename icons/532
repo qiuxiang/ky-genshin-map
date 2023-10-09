@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no, shrink-to-fit=no">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/files.photo.gallery@0.4.1/css/files.css" rel="stylesheet">
+      </head>
+  <body><div id="files-login-container"></div></body>
+  <script>
+    document.getElementById('files-login-container').innerHTML = '\
+    <h1 class="header mb-5">Login</h1>\
+    \
+    <form>\
+      <div class="mylogin">\
+        <input type="text" name="username" placeholder="Username">\
+        <input type="password" name="password" placeholder="Password">\
+      </div>\
+        <input type="text" name="fusername" class="form-control form-control-lg mb-3" placeholder="Username" required autofocus spellcheck="false" autocorrect="off" autocapitalize="off">\
+        <input type="password" name="fpassword" class="form-control form-control-lg mb-3" placeholder="Password" required spellcheck="false">\
+      <input type="hidden" name="client_hash" value="bf3e88571488a86ca3ce3dbe78be09ba">\
+      <input type="hidden" name="sidx" value="505b1d28085dad468cb5d289eabe6cb0">\
+      <input type="submit" value="Login" class="btn btn-lg btn-files-light btn-login">\
+    </form>';
+    document.getElementsByTagName('form')[0].addEventListener('submit', function(){
+      this.action = '/';
+      this.method = 'post';
+    }, false);
+  </script>
+</html>
