@@ -10,7 +10,7 @@ jobs:
       - run: |
           wget https://github.com/qiuxiang/genshin-maps/files/12844845/data.tar.gz
           tar xf data.tar.gz
-          cp dist/data_pb.* src/
+          mv dist/data_pb.* src/
           mv index.html dist/
           corepack enable
       - run: pnpm i
