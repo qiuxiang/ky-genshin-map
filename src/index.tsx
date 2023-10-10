@@ -1,7 +1,3 @@
-// android webview 需要用 file:// 加载文件, 但 fetch 不支持, xhr 实现的 fetch 可以绕过
-const { fetch } = require("whatwg-fetch");
-window.fetch = fetch;
-
 import { createRoot } from "react-dom/client";
 import { useSnapshot } from "valtio";
 import { AreaPicker, closeAreaPicker } from "./area-picker";
@@ -29,11 +25,6 @@ function Main() {
       <Drawer />
     </>
   );
-}
-
-if (typeof Neutralino != "undefined") {
-  Neutralino.init();
-  Neutralino.events.on("windowClose", () => Neutralino.app.exit());
 }
 
 document.addEventListener("contextmenu", (event) => {
