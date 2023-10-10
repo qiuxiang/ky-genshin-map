@@ -58,7 +58,7 @@
 .h-8{height:2rem;}
 .h-9{height:2.25rem;}
 .h-full{height:100%;}
-.max-w-xs{max-width:20rem;}
+.max-w-\[12rem\]{max-width:12rem;}
 .w-1\/2{width:50%;}
 .w-10{width:2.5rem;}
 .w-11{width:2.75rem;}
@@ -177,7 +177,7 @@
 .md\:h-16{height:4rem;}
 .md\:h-20{height:5rem;}
 .md\:h-5{height:1.25rem;}
-.md\:max-w-md{max-width:28rem;}
+.md\:max-w-xs{max-width:20rem;}
 .md\:w-14{width:3.5rem;}
 .md\:w-16{width:4rem;}
 .md\:text-2xl{font-size:1.5rem;line-height:2rem;}
