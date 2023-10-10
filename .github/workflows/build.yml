@@ -11,7 +11,7 @@ jobs:
           wget https://github.com/qiuxiang/genshin-maps/files/12844845/data.tar.gz
           tar xf data.tar.gz
           mv dist/data_pb.* src/
-          mv index.html dist/
+          cp index.html dist/
           corepack enable
           pnpm i
           cp node_modules/canvaskit-wasm/bin/canvaskit.wasm dist/
