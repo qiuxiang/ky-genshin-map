@@ -20,7 +20,7 @@ export function GenshinMap() {
   return (
     <Tilemap
       key={mapInfo.getId()}
-      className="absolute w-full h-full"
+      className="absolute w-full h-full bg-gray-900"
       mapSize={[mapInfo.getWidth(), mapInfo.getHeight()]}
       origin={[mapInfo.getOriginX(), mapInfo.getOriginY()]}
       maxZoom={1}

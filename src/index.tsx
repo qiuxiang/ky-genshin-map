@@ -13,9 +13,9 @@ function Main() {
   const { mapData } = useSnapshot(store);
   if (!mapData) {
     return (
-      <div className="w-full h-full bg-white flex justify-center items-center">
+      <div className="w-full h-full flex justify-center items-center">
         <img
-          className="max-w-xs md:max-w-md"
+          className="max-w-[12rem] md:max-w-xs"
           src={require("../images/splash.jpg")}
         />
       </div>
