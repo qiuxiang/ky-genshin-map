@@ -22,7 +22,8 @@ export function Switch({
         "gap-2 flex items-center",
         props.className as string
       )}
-      onClick={() => {
+      onClick={(event) => {
+        event.stopPropagation();
         setValue(!value);
         onChange(!value);
       }}

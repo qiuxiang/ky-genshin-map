@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          wget https://github.com/qiuxiang/genshin-maps/files/12844845/data.tar.gz
+          wget https://github.com/qiuxiang/ky-genshin-map/files/12854777/data.tar.gz
           tar xf data.tar.gz
           mv dist/data_pb.* src/
           cp index.html dist/
