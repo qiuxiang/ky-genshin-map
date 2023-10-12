@@ -14,7 +14,20 @@ canvaskit 实现，超级丝滑的原神地图，数据来源：[空荧酒馆](h
 
 https://github.com/qiuxiang/ky-genshin-map/assets/1709072/193c2ed9-2cce-44d5-9fbe-5979c6a9a0f1
 
-### TODO
+## 构建
+
+```bash
+# 初始化
+pnpm run init
+
+# 开发
+pnpm run dev
+
+# 编译
+pnpm run build
+```
+
+## TODO
 
 - [ ] 和原神内置的分层地图一样，对同层的点位特别标记
 - [ ] 完善各地区/子地区地名显示
