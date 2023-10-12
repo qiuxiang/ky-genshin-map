@@ -18,7 +18,11 @@ export const store = proxy({
 
 async function init() {
   const [response] = await Promise.all([
-    fetch("http://ky-genshin-map.test.upcdn.net/data.txt"),
+    fetch(
+      location.protocol == "http:"
+        ? "http://ky-genshin-map.test.upcdn.net/data.txt"
+        : require("./data.bin")
+    ),
     initCanvaskit({
       locateFile() {
         return "https://cdn.staticfile.org/canvaskit-wasm/0.38.2/canvaskit.wasm";
