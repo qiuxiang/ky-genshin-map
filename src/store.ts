@@ -21,7 +21,7 @@ async function init() {
     fetch(
       location.protocol == "http:"
         ? "http://ky-genshin-map.test.upcdn.net/data.txt"
-        : require("./data.bin")
+        : require("./data.txt")
     ),
     initCanvaskit({
       locateFile() {

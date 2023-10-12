@@ -23,6 +23,7 @@ async function main() {
       ".jpg": "file",
       ".otf": "file",
       ".bin": "file",
+      ".txt": "file",
     },
     alias,
   };
