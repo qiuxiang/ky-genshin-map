@@ -1,12 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "init": "wget https://github.com/qiuxiang/ky-genshin-map/files/12854777/data.tar.gz && tar xf data.tar.gz && mv dist/data_pb.* src/ && ln index.html dist/",
+    "init": "wget https://github.com/qiuxiang/ky-genshin-map/files/12854777/data.tar.gz && tar xf data.tar.gz && mv dist/data* src/ && ln index.html dist/",
     "uno": "unocss -o dist/uno.css 'src/**/*.tsx' index.html",
-    "esbuild": "esbuild --bundle --minify --loader:.jpg=file --loader:.png=file --loader:.otf=file --alias:react-dom=preact/compat --alias:react-dom/client=preact/compat/client --alias:react=preact/compat --external:fs --external:path --outdir=dist src/index.tsx",
-    "build": "pnpm run esbuild && pnpm run uno",
-    "esbuild-dev": "pnpm run esbuild --watch --sourcemap --serve --servedir=dist",
-    "dev": "(pnpm run uno -w) & pnpm run esbuild-dev"
+    "build": "esbuild build.ts --format=cjs | node",
+    "dev": "esbuild build.ts --format=cjs | node - dev"
   },
   "dependencies": {
     "@canvaskit-tilemap/core": "^0.4.0",

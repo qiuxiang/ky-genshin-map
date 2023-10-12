@@ -1,3 +1,6 @@
+/**
+ * 全局状态
+ */
 import { initCanvaskit } from "@canvaskit-tilemap/core";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
@@ -15,7 +18,7 @@ export const store = proxy({
 
 async function init() {
   const [response] = await Promise.all([
-    fetch("data.bin"),
+    fetch(require("./data.bin")),
     initCanvaskit({
       locateFile() {
         return "https://cdn.staticfile.org/canvaskit-wasm/0.38.2/canvaskit.wasm";
