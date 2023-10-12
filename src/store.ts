@@ -14,7 +14,14 @@ export const store = proxy({
 });
 
 async function init() {
-  const [response] = await Promise.all([fetch("data.bin"), initCanvaskit()]);
+  const [response] = await Promise.all([
+    fetch("data.bin"),
+    initCanvaskit({
+      locateFile() {
+        return "https://cdn.staticfile.org/canvaskit-wasm/0.38.2/canvaskit.wasm";
+      },
+    }),
+  ]);
   const buffer = await response.arrayBuffer();
   store.mapData = ref(MapData.deserializeBinary(new Uint8Array(buffer)));
   activateArea(store.mapData.getAreaList()[0]);

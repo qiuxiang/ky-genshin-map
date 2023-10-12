@@ -11,7 +11,6 @@ jobs:
           corepack enable
           pnpm i
           pnpm run init
-          cp node_modules/canvaskit-wasm/bin/canvaskit.wasm dist/
           pnpm run build
       - run: pnpm run build
       - uses: JamesIves/github-pages-deploy-action@v4
