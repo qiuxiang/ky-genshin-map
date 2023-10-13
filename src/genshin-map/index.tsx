@@ -1,4 +1,5 @@
 import { TileLayer, Tilemap } from "@canvaskit-tilemap/react";
+import { CanvasKit } from "canvaskit-wasm";
 import { useSnapshot } from "valtio";
 import { store } from "../store";
 import { ActiveMarkerLayer } from "./active-marker-layer";
@@ -16,10 +17,11 @@ export const zIndex = {
 };
 
 export function GenshinMap() {
-  const { activeAreaItems, mapInfo } = useSnapshot(store);
+  const { activeAreaItems, mapInfo, canvaskit } = useSnapshot(store);
   return (
     <Tilemap
       key={mapInfo.getId()}
+      canvaskit={canvaskit as CanvasKit}
       className="absolute w-full h-full bg-gray-900"
       mapSize={[mapInfo.getWidth(), mapInfo.getHeight()]}
       origin={[mapInfo.getOriginX(), mapInfo.getOriginY()]}

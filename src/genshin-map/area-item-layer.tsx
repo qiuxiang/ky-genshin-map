@@ -115,7 +115,6 @@ function DefaultMarkerLayer({
         <img
           className="w-11/12 h-11/12 object-contain"
           src={`icons/${areaItem.getIcon()}`}
-          crossOrigin="anonymous"
         />
       </div>
       {underground && (
@@ -152,7 +151,6 @@ function BorderlessMarkerLayer({
         <img
           className="w-full h-full object-contain"
           src={`icons/${areaItem.getIcon()}`}
-          crossOrigin="anonymous"
         />
       </div>
       {underground && (

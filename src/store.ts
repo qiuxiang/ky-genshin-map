@@ -1,13 +1,14 @@
 /**
  * 全局状态
  */
-import { initCanvaskit } from "@canvaskit-tilemap/core";
+import initCanvaskit, { CanvasKit } from "canvaskit-wasm";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
 import { Area, AreaItem, MapData, MapInfo } from "./data_pb";
 
 export const isApp = navigator.userAgent.includes("app");
 export const store = proxy({
+  canvaskit: null as unknown as CanvasKit,
   mapData: null as unknown as MapData,
   mapInfo: null as unknown as MapInfo,
   areaItems: {} as Record<string, Record<string, AreaItem[]>>,
@@ -17,7 +18,7 @@ export const store = proxy({
 });
 
 async function init() {
-  const [response] = await Promise.all([
+  const [response, canvaskit] = await Promise.all([
     fetch(
       location.protocol == "http:"
         ? "http://ky-genshin-map.test.upcdn.net/data.txt"
@@ -29,6 +30,7 @@ async function init() {
       },
     }),
   ]);
+  store.canvaskit = ref(canvaskit);
   const buffer = await response.arrayBuffer();
   store.mapData = ref(MapData.deserializeBinary(new Uint8Array(buffer)));
   activateArea(store.mapData.getAreaList()[0]);
