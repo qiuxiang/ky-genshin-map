@@ -109,7 +109,7 @@ function UndergroundMapItem(props: UndergroundMapProps) {
         </div>
       );
     });
-  }, []);
+  }, [current]);
 
   const domLayerElement = useRef<HTMLDivElement>(null);
   const hidden = zoomLevel < -2 && activeUndergroundMap == null;
