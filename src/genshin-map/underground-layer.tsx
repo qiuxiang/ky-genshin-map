@@ -1,7 +1,6 @@
 import { DomLayer, ImageLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
 import { useMemo, useRef, useState } from "react";
-import { Transition } from "react-transition-group";
 import { useSnapshot } from "valtio";
 import { zIndex } from ".";
 import { UndergroundMap } from "../data_pb";
