@@ -1,5 +1,6 @@
 import { DomLayer, MarkerLayer } from "@canvaskit-tilemap/react";
 import classNames from "classnames";
+import { useState } from "react";
 import { useSnapshot } from "valtio";
 import { zIndex } from ".";
 import { borderlessNames, bottomCenterAnchor } from "./area-item-layer";
@@ -7,24 +8,28 @@ import { AreaItemMarker, mark, state, unmark } from "./state";
 
 export function ActiveMarkerLayer() {
   const { activeMarker } = useSnapshot(state);
+  const [loading, setLoading] = useState(true);
   const image = (
-    <img class="w-4 block" src={require("../../images/active-marker.png")} />
+    <img
+      class="w-4 block"
+      src={require("../../images/active-marker.png")}
+      onLoad={() => setLoading(false)}
+    />
   );
   return (
     <>
-      <MarkerLayer items={[]} cacheKey="activeMarker">
-        {image}
-      </MarkerLayer>
+      <div className="hidden">{image}</div>
+      {!loading && (
+        <MarkerLayer
+          items={activeMarker ? [activeMarker] : []}
+          anchor={bottomCenterAnchor}
+          zIndex={zIndex.activeMarker}
+        >
+          {image}
+        </MarkerLayer>
+      )}
       {activeMarker && (
         <>
-          <MarkerLayer
-            items={[activeMarker]}
-            anchor={bottomCenterAnchor}
-            zIndex={zIndex.activeMarker}
-            cacheKey="activeMarker"
-          >
-            {image}
-          </MarkerLayer>
           <MarkerInfo {...activeMarker} />
         </>
       )}
