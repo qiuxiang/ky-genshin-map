@@ -7,8 +7,8 @@
     "dev": "esbuild build.ts --format=cjs | node - dev"
   },
   "dependencies": {
-    "@canvaskit-tilemap/core": "^0.4.0",
-    "@canvaskit-tilemap/react": "^0.4.0",
+    "@canvaskit-tilemap/core": "^0.6.0",
+    "@canvaskit-tilemap/react": "^0.5.0",
     "canvaskit-wasm": "^0.38.2",
     "classnames": "^2.3.2",
     "google-protobuf": "^3.21.2",
