@@ -75,7 +75,6 @@ function UndergroundMapItem(props: UndergroundMapProps) {
       return i.getChunkList().map((chunk, index) => {
         const image = new Image();
         image.src = `underground/${i.getId()}_${index}.webp`;
-        image.crossOrigin = "";
         return (
           <ImageLayer
             key={image.src}
@@ -89,54 +88,45 @@ function UndergroundMapItem(props: UndergroundMapProps) {
     });
   }, [current]);
 
+  const labels = useMemo(() => {
+    return undergroundMap.getChildList().map((i) => {
+      return (
+        <div
+          key={i.getId()}
+          className={classNames(
+            "w-36 box-border overflow-hidden px-2 py-1 text-xs whitespace-nowrap text-ellipsis text-center font-semibold",
+            i == current ? "bg-yellow-500/80 text-white" : "bg-white/80"
+          )}
+          onClick={() => {
+            if (i == current) {
+              setCurrent(undefined);
+            } else {
+              setCurrent(i);
+            }
+          }}
+        >
+          {i.getName()}
+        </div>
+      );
+    });
+  }, []);
+
   const domLayerElement = useRef<HTMLDivElement>(null);
+  const hidden = zoomLevel < -2 && activeUndergroundMap == null;
   return (
     <>
       {chunks}
       {undergroundMap.getChildList().length > 1 && (
-        <Transition
-          nodeRef={domLayerElement}
-          in={zoomLevel > -3 || activeUndergroundMap != null}
-          timeout={100}
-        >
-          {(state) => {
-            return (
-              <DomLayer x={x} y={y}>
-                <div
-                  ref={domLayerElement}
-                  className={classNames(
-                    "flex flex-col rounded-md overflow-hidden shadow-md duration-100 ease-out",
-                    state == "entered" ? "opacity-100" : "opacity-0",
-                    state == "exited" ? "hidden h-0" : "block"
-                  )}
-                >
-                  {undergroundMap.getChildList().map((i) => {
-                    return (
-                      <div
-                        key={i.getId()}
-                        className={classNames(
-                          "w-36 box-border overflow-hidden px-2 py-1 text-xs whitespace-nowrap text-ellipsis text-center font-semibold",
-                          i == current
-                            ? "bg-yellow-500/80 text-white"
-                            : "bg-white/80"
-                        )}
-                        onClick={() => {
-                          if (i == current) {
-                            setCurrent(undefined);
-                          } else {
-                            setCurrent(i);
-                          }
-                        }}
-                      >
-                        {i.getName()}
-                      </div>
-                    );
-                  })}
-                </div>
-              </DomLayer>
-            );
-          }}
-        </Transition>
+        <DomLayer x={x} y={y} hidden={hidden}>
+          <div
+            ref={domLayerElement}
+            className={classNames(
+              "flex flex-col rounded-md overflow-hidden shadow-md duration-100 ease-out"
+            )}
+          >
+            {labels}
+          </div>
+        </DomLayer>
       )}
     </>
   );
