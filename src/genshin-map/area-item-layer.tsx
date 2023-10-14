@@ -25,34 +25,48 @@ interface AreaItemLayerProps {
 
 export const bottomCenterAnchor = [0, 1] as [number, number];
 
+// TODO: 这里的冗余代码有点多，需要优化
 export function AreaItemLayer(props: AreaItemLayerProps) {
   const { activeMarker, marked, markedVisible } = useSnapshot(state);
-  const [items, undergroundItems, markedItems, markedUndergroundItems] =
-    useMemo(() => {
-      const items = [];
-      const undergroundItems = [];
-      const markedItems = [];
-      const markedUndergroundItems = [];
-      for (const item of getMarkers(props.areaItem)) {
-        if (item.marker == activeMarker?.marker) {
-          continue;
-        }
-        if (item.marker?.getUnderground()) {
+  const items = useMemo(() => {
+    const items = {
+      default: [] as AreaItemMarker[],
+      underground: [] as AreaItemMarker[],
+      marked: [] as AreaItemMarker[],
+      markedUnderground: [] as AreaItemMarker[],
+      activeUnderground: [] as AreaItemMarker[],
+      activeMarkedUnderground: [] as AreaItemMarker[],
+    };
+    const activeUnderground = state.activeUndergroundMap?.getId();
+    for (const item of getMarkers(props.areaItem)) {
+      if (item.marker == activeMarker?.marker) {
+        continue;
+      }
+      const underground = item.marker?.getUnderground();
+      if (underground) {
+        if (underground == activeUnderground) {
           if (marked.has(item.marker.getId())) {
-            markedUndergroundItems.push(item);
+            items.activeMarkedUnderground.push(item);
           } else {
-            undergroundItems.push(item);
+            items.activeUnderground.push(item);
           }
         } else {
           if (marked.has(item.marker.getId())) {
-            markedItems.push(item);
+            items.markedUnderground.push(item);
           } else {
-            items.push(item);
+            items.underground.push(item);
           }
         }
+      } else {
+        if (marked.has(item.marker.getId())) {
+          items.marked.push(item);
+        } else {
+          items.default.push(item);
+        }
       }
-      return [items, undergroundItems, markedItems, markedUndergroundItems];
-    }, [activeMarker?.areaItem == props.areaItem && activeMarker]);
+    }
+    return items;
+  }, [activeMarker?.areaItem == props.areaItem && activeMarker]);
 
   const commonProps = { ...props, onClick: activateMarker };
   const Component = borderlessNames.includes(props.areaItem.getName())
@@ -61,21 +75,38 @@ export function AreaItemLayer(props: AreaItemLayerProps) {
 
   return (
     <>
-      {markedVisible && markedUndergroundItems.length > 0 && (
+      {markedVisible && items.markedUnderground.length > 0 && (
         <Component
           {...commonProps}
-          items={markedUndergroundItems}
+          items={items.markedUnderground}
           underground
           marked
         />
       )}
-      {markedVisible && markedItems.length > 0 && (
-        <Component {...commonProps} items={markedItems} marked />
+      {markedVisible && items.activeMarkedUnderground.length > 0 && (
+        <Component
+          {...commonProps}
+          items={items.activeMarkedUnderground}
+          activeUnderground
+          marked
+        />
       )}
-      {undergroundItems.length > 0 && (
-        <Component {...commonProps} items={undergroundItems} underground />
+      {markedVisible && items.marked.length > 0 && (
+        <Component {...commonProps} items={items.marked} marked />
       )}
-      {items.length > 0 && <Component {...commonProps} items={items} />}
+      {items.underground.length > 0 && (
+        <Component {...commonProps} items={items.underground} underground />
+      )}
+      {items.activeUnderground.length > 0 && (
+        <Component
+          {...commonProps}
+          items={items.activeUnderground}
+          activeUnderground
+        />
+      )}
+      {items.default.length > 0 && (
+        <Component {...commonProps} items={items.default} />
+      )}
     </>
   );
 }
@@ -83,6 +114,7 @@ export function AreaItemLayer(props: AreaItemLayerProps) {
 interface MarkerLayerProps extends AreaItemLayerProps {
   items: AreaItemMarker[];
   underground?: boolean;
+  activeUnderground?: boolean;
   marked?: boolean;
   onClick: (item: AreaItemMarker) => void;
 }
@@ -90,6 +122,7 @@ interface MarkerLayerProps extends AreaItemLayerProps {
 function DefaultMarkerLayer({
   areaItem,
   underground = false,
+  activeUnderground = false,
   marked = false,
   ...props
 }: MarkerLayerProps) {
@@ -103,7 +136,6 @@ function DefaultMarkerLayer({
       className={classNames("p-1", marked && "opacity-70")}
       anchor={bottomCenterAnchor}
       zIndex={zIndex.marker}
-      cacheKey={`${areaItem.getName()}_${underground}_${marked}`}
     >
       <div
         className={classNames(
@@ -119,8 +151,14 @@ function DefaultMarkerLayer({
       </div>
       {underground && (
         <img
-          className="absolute w-3 h-3 bottom-0.5 right-0.5"
+          className="absolute w-4 h-4 bottom-0 right-0"
           src={require("../../images/icon-underground.png")}
+        />
+      )}
+      {activeUnderground && (
+        <img
+          className="absolute w-4 h-4 bottom-0 right-0"
+          src={require("../../images/icon-underground-active.png")}
         />
       )}
     </MarkerLayer>
@@ -130,6 +168,7 @@ function DefaultMarkerLayer({
 function BorderlessMarkerLayer({
   areaItem,
   underground = false,
+  activeUnderground = false,
   marked = false,
   ...props
 }: MarkerLayerProps) {
@@ -137,7 +176,6 @@ function BorderlessMarkerLayer({
     <MarkerLayer
       {...props}
       anchor={bottomCenterAnchor}
-      cacheKey={`${areaItem.getName()}_${underground}`}
       zIndex={
         areaItem.getName() == "七天神像" ? zIndex.marker + 2 : zIndex.marker + 1
       }
@@ -155,8 +193,14 @@ function BorderlessMarkerLayer({
       </div>
       {underground && (
         <img
-          className="absolute w-3 h-3 bottom-0.5 right-0.5"
+          className="absolute w-4 h-4 bottom-0 right-0"
           src={require("../../images/icon-underground.png")}
+        />
+      )}
+      {activeUnderground && (
+        <img
+          className="absolute w-4 h-4 bottom-0 right-0"
+          src={require("../../images/icon-underground-active.png")}
         />
       )}
     </MarkerLayer>

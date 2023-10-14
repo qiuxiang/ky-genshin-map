@@ -1,8 +1,4 @@
-import {
-  MarkerItem,
-  Tilemap,
-  TilemapClickEvent,
-} from "@canvaskit-tilemap/core";
+import { MapClickEvent, MarkerItem, Tilemap } from "@canvaskit-tilemap/core";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
 import { AreaItem, Marker, UndergroundMap } from "../data_pb";
@@ -45,7 +41,7 @@ export function toggleTeleport() {
   state.teleportVisible = !state.teleportVisible;
 }
 
-export function onTilemapClick(event: TilemapClickEvent) {
+export function onTilemapClick(event: MapClickEvent) {
   if (!event.markerItem) {
     state.activeMarker = null;
     state.activeUndergroundMap = null;
