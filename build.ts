@@ -22,8 +22,7 @@ async function main() {
       ".png": "file",
       ".jpg": "file",
       ".otf": "file",
-      ".bin": "file",
-      ".txt": "file",
+      ".gz": "file",
     },
     alias,
   };

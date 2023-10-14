@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "init": "wget https://github.com/qiuxiang/ky-genshin-map/files/12880123/data.tar.gz && tar xf data.tar.gz && mv dist/data* src/ && ln index.html dist/",
+    "init": "wget https://github.com/qiuxiang/ky-genshin-map/files/12903113/data.tar.gz && tar xf data.tar.gz && mv dist/data* src/ && ln index.html dist/",
     "uno": "unocss -o dist/uno.css 'src/**/*.tsx' index.html",
     "build": "esbuild build.ts --format=cjs | node",
     "dev": "esbuild build.ts --format=cjs | node - dev"
@@ -11,6 +11,7 @@
     "@canvaskit-tilemap/react": "^0.5.0",
     "canvaskit-wasm": "^0.38.2",
     "classnames": "^2.3.2",
+    "fflate": "^0.8.1",
     "google-protobuf": "^3.21.2",
     "preact": "^10.17.1",
     "valtio": "^1.11.2"

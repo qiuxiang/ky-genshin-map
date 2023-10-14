@@ -2,6 +2,7 @@
  * 全局状态
  */
 import initCanvaskit, { CanvasKit } from "canvaskit-wasm";
+import { decompress } from "fflate";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
 import { Area, AreaItem, MapData, MapInfo } from "./data_pb";
@@ -21,8 +22,8 @@ async function init() {
   const [response, canvaskit] = await Promise.all([
     fetch(
       location.protocol == "http:"
-        ? "http://ky-genshin-map.test.upcdn.net/data.txt"
-        : require("./data.txt")
+        ? "http://ky-genshin-map.test.upcdn.net/data.gz"
+        : require("./data.gz")
     ),
     initCanvaskit({
       locateFile() {
@@ -30,13 +31,15 @@ async function init() {
       },
     }),
   ]);
-  store.canvaskit = ref(canvaskit);
-  const buffer = await response.arrayBuffer();
-  store.mapData = ref(MapData.deserializeBinary(new Uint8Array(buffer)));
-  activateArea(store.mapData.getAreaList()[0]);
-  store.mapInfo = ref(
-    store.mapData.getMapInfoMap().get(store.activeTopArea.getMapId())!
-  );
+  decompress(new Uint8Array(await response.arrayBuffer()), (_, data) => {
+    console.log(data);
+    store.canvaskit = ref(canvaskit);
+    store.mapData = ref(MapData.deserializeBinary(data));
+    activateArea(store.mapData.getAreaList()[0]);
+    store.mapInfo = ref(
+      store.mapData.getMapInfoMap().get(store.activeTopArea.getMapId())!
+    );
+  });
 }
 
 init();
