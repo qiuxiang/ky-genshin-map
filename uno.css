@@ -12,11 +12,11 @@
 .-right-20{right:-5rem;}
 .-top-1{top:-0.25rem;}
 .-top-20{top:-5rem;}
-.bottom-0\.5{bottom:0.125rem;}
+.bottom-0{bottom:0;}
 .bottom-4{bottom:1rem;}
 .left-0{left:0;}
 .left-4{left:1rem;}
-.right-0\.5{right:0.125rem;}
+.right-0{right:0;}
 .right-2{right:0.5rem;}
 .right-4{right:1rem;}
 .top-\[calc\(-100\%-2\.5rem\)\]{top:calc(-100% - 2.5rem);}
@@ -51,6 +51,7 @@
 .h-16{height:4rem;}
 .h-2\.5{height:0.625rem;}
 .h-3{height:0.75rem;}
+.h-4{height:1rem;}
 .h-5{height:1.25rem;}
 .h-6{height:1.5rem;}
 .h-7{height:1.75rem;}
@@ -64,7 +65,6 @@
 .w-11\/12{width:91.6666666667%;}
 .w-12{width:3rem;}
 .w-14{width:3.5rem;}
-.w-3{width:0.75rem;}
 .w-36{width:9rem;}
 .w-4{width:1rem;}
 .w-5{width:1.25rem;}
