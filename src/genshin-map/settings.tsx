@@ -21,7 +21,7 @@ export function Settings() {
       />
       <Switch
         defaultValue={state.markedVisible}
-        label="已标记点位"
+        label="已标记"
         onChange={toggleMarkedVisible}
       />
     </div>

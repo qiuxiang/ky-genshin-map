@@ -27,46 +27,39 @@ export const bottomCenterAnchor = [0, 1] as [number, number];
 
 // TODO: 这里的冗余代码有点多，需要优化
 export function AreaItemLayer(props: AreaItemLayerProps) {
-  const { activeMarker, marked, markedVisible } = useSnapshot(state);
+  const { activeMarker, marked, markedVisible, activeUndergroundMap } =
+    useSnapshot(state);
   const items = useMemo(() => {
     const items = {
       default: [] as AreaItemMarker[],
       underground: [] as AreaItemMarker[],
-      marked: [] as AreaItemMarker[],
-      markedUnderground: [] as AreaItemMarker[],
       activeUnderground: [] as AreaItemMarker[],
-      activeMarkedUnderground: [] as AreaItemMarker[],
     };
-    const activeUnderground = state.activeUndergroundMap?.getId();
+    const activeUnderground = activeUndergroundMap?.getId();
     for (const item of getMarkers(props.areaItem)) {
       if (item.marker == activeMarker?.marker) {
+        continue;
+      }
+      if (!markedVisible && marked.has(item.marker.getId())) {
         continue;
       }
       const underground = item.marker?.getUnderground();
       if (underground) {
         if (underground == activeUnderground) {
-          if (marked.has(item.marker.getId())) {
-            items.activeMarkedUnderground.push(item);
-          } else {
-            items.activeUnderground.push(item);
-          }
+          items.activeUnderground.push(item);
         } else {
-          if (marked.has(item.marker.getId())) {
-            items.markedUnderground.push(item);
-          } else {
-            items.underground.push(item);
-          }
+          items.underground.push(item);
         }
       } else {
-        if (marked.has(item.marker.getId())) {
-          items.marked.push(item);
-        } else {
-          items.default.push(item);
-        }
+        items.default.push(item);
       }
     }
     return items;
-  }, [activeMarker?.areaItem == props.areaItem && activeMarker]);
+  }, [
+    activeMarker?.areaItem == props.areaItem && activeMarker,
+    markedVisible,
+    activeUndergroundMap,
+  ]);
 
   const commonProps = { ...props, onClick: activateMarker };
   const Component = borderlessNames.includes(props.areaItem.getName())
@@ -75,25 +68,6 @@ export function AreaItemLayer(props: AreaItemLayerProps) {
 
   return (
     <>
-      {markedVisible && items.markedUnderground.length > 0 && (
-        <Component
-          {...commonProps}
-          items={items.markedUnderground}
-          underground
-          marked
-        />
-      )}
-      {markedVisible && items.activeMarkedUnderground.length > 0 && (
-        <Component
-          {...commonProps}
-          items={items.activeMarkedUnderground}
-          activeUnderground
-          marked
-        />
-      )}
-      {markedVisible && items.marked.length > 0 && (
-        <Component {...commonProps} items={items.marked} marked />
-      )}
       {items.underground.length > 0 && (
         <Component {...commonProps} items={items.underground} underground />
       )}
@@ -115,7 +89,6 @@ interface MarkerLayerProps extends AreaItemLayerProps {
   items: AreaItemMarker[];
   underground?: boolean;
   activeUnderground?: boolean;
-  marked?: boolean;
   onClick: (item: AreaItemMarker) => void;
 }
 
@@ -123,7 +96,6 @@ function DefaultMarkerLayer({
   areaItem,
   underground = false,
   activeUnderground = false,
-  marked = false,
   ...props
 }: MarkerLayerProps) {
   const { undergroundEnabled } = useSnapshot(state);
@@ -133,15 +105,14 @@ function DefaultMarkerLayer({
   return (
     <MarkerLayer
       {...props}
-      className={classNames("p-1", marked && "opacity-70")}
+      className="p-1"
       anchor={bottomCenterAnchor}
       zIndex={zIndex.marker}
     >
       <div
         className={classNames(
-          "w-6 h-6 flex justify-center items-center rounded-full border border-solid bg-gray-700",
-          isSafari ? "drop-shadow" : "drop-shadow-sm",
-          marked ? "border-cyan-600/90" : "border-white"
+          "w-6 h-6 flex justify-center items-center rounded-full border border-white border-solid bg-gray-700",
+          isSafari ? "drop-shadow" : "drop-shadow-sm"
         )}
       >
         <img
@@ -169,13 +140,13 @@ function BorderlessMarkerLayer({
   areaItem,
   underground = false,
   activeUnderground = false,
-  marked = false,
   ...props
 }: MarkerLayerProps) {
   return (
     <MarkerLayer
       {...props}
       anchor={bottomCenterAnchor}
+      cacheKey={`${areaItem.getName()}_${underground}_${activeUnderground}`}
       zIndex={
         areaItem.getName() == "七天神像" ? zIndex.marker + 2 : zIndex.marker + 1
       }

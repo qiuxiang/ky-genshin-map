@@ -32,7 +32,6 @@ async function init() {
     }),
   ]);
   decompress(new Uint8Array(await response.arrayBuffer()), (_, data) => {
-    console.log(data);
     store.canvaskit = ref(canvaskit);
     store.mapData = ref(MapData.deserializeBinary(data));
     activateArea(store.mapData.getAreaList()[0]);
