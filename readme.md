@@ -4,7 +4,7 @@ canvaskit 实现，超级丝滑的原神地图，数据来源：[空荧酒馆](h
 
 - https://qiuxiang.github.io/ky-genshin-map/ (github pages)
 - http://ky-genshin-map.7c00.cc/ (cloudflare)
-- http://106.55.55.247/ky-genshin-map/ (国内测试服务器)
+- http://qiuxiang.gitee.io/ky-genshin-map/ (gitee)
 
 ![图片](https://github.com/qiuxiang/ky-genshin-map/assets/1709072/2ea4b8e7-1978-4b95-a353-cc712a01b21e)
 
