@@ -75,6 +75,7 @@
 .w-72{width:18rem;}
 .w-9{width:2.25rem;}
 .w-full{width:100%;}
+.w\[q\]{width:q;}
 .flex{display:flex;}
 .flex-1{flex:1 1 0%;}
 .flex-col{flex-direction:column;}
