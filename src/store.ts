@@ -23,7 +23,7 @@ async function init() {
     fetch(
       location.protocol == "http:"
         ? "http://ky-genshin-map.test.upcdn.net/data.gz"
-        : require("./data.gz")
+        : "https://ky-genshin-map-1253179036.cos.ap-nanjing.myqcloud.com/data.gz"
     ),
     initCanvaskit({
       locateFile() {
