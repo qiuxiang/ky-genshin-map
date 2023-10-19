@@ -1,4 +1,4 @@
-import { MapClickEvent, MarkerItem, Tilemap } from "@canvaskit-tilemap/core";
+import { MapClickEvent, MarkerItem, CanvaskitMap } from "@canvaskit-map/core";
 import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
 import { AreaItem, Marker, UndergroundMap } from "../data_pb";
@@ -10,7 +10,7 @@ export interface AreaItemMarker extends MarkerItem {
 }
 
 export const state = proxy({
-  tilemap: null as unknown as Tilemap,
+  tilemap: null as unknown as CanvaskitMap,
   zoomLevel: 0,
   undergroundEnabled: false,
   activeUndergroundMap: null as UndergroundMap | null,
@@ -20,7 +20,7 @@ export const state = proxy({
   marked: proxySet<number>(),
 });
 
-export async function onTilemapReady(tilemap: Tilemap) {
+export async function onTilemapReady(tilemap: CanvaskitMap) {
   state.tilemap = ref(tilemap);
   onTilemapMove();
 }

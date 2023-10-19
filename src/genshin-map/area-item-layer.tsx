@@ -1,4 +1,4 @@
-import { MarkerLayer } from "@canvaskit-tilemap/react";
+import { MarkerLayer } from "@canvaskit-map/react";
 import classNames from "classnames";
 import { useMemo } from "react";
 import { useSnapshot } from "valtio";

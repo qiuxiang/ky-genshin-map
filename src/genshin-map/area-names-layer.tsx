@@ -1,4 +1,4 @@
-import { TextLayer } from "@canvaskit-tilemap/react";
+import { TextLayer } from "@canvaskit-map/react";
 import { useSnapshot } from "valtio";
 import { zIndex } from ".";
 import { store } from "../store";

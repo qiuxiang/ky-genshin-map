@@ -1,4 +1,4 @@
-import { DomLayer, MarkerLayer } from "@canvaskit-tilemap/react";
+import { DomLayer, MarkerLayer } from "@canvaskit-map/react";
 import classNames from "classnames";
 import { useState } from "react";
 import { useSnapshot } from "valtio";

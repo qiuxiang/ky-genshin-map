@@ -1,5 +1,5 @@
-import { Layer } from "@canvaskit-tilemap/core";
-import { CustomLayer } from "@canvaskit-tilemap/react";
+import { Layer } from "@canvaskit-map/core";
+import { CustomLayer } from "@canvaskit-map/react";
 import { Canvas, Paint } from "canvaskit-wasm";
 import { zIndex } from ".";
 

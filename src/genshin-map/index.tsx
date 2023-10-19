@@ -1,4 +1,4 @@
-import { TileLayer, Tilemap } from "@canvaskit-tilemap/react";
+import { TileLayer, CanvaskitMap } from "@canvaskit-map/react";
 import { CanvasKit } from "canvaskit-wasm";
 import { useSnapshot } from "valtio";
 import { store } from "../store";
@@ -19,7 +19,7 @@ export const zIndex = {
 export function GenshinMap() {
   const { activeAreaItems, mapInfo, canvaskit } = useSnapshot(store);
   return (
-    <Tilemap
+    <CanvaskitMap
       key={mapInfo.getId()}
       canvaskit={canvaskit as CanvasKit}
       className="absolute w-full h-full bg-gray-900"
@@ -46,6 +46,6 @@ export function GenshinMap() {
       <UndergroundLayer />
       <TeleportLayer />
       <AreaNamesLayer />
-    </Tilemap>
+    </CanvaskitMap>
   );
 }
