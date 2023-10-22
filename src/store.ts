@@ -27,7 +27,7 @@ async function init() {
     ),
     initCanvaskit({
       locateFile() {
-        return "https://cdn.staticfile.org/canvaskit-wasm/0.38.2/canvaskit.wasm";
+        return "https://cdn.staticfile.org/canvaskit-wasm/0.39.1/canvaskit.wasm";
       },
     }),
   ]);

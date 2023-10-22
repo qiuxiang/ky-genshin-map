@@ -7,23 +7,23 @@
     "dev": "esbuild build.ts --format=cjs | node - dev"
   },
   "dependencies": {
-    "@canvaskit-map/core": "^0.0.1",
-    "@canvaskit-map/react": "^0.0.1",
-    "canvaskit-wasm": "^0.38.2",
+    "@canvaskit-map/core": "^0.1.1",
+    "@canvaskit-map/react": "^0.1.1",
+    "canvaskit-wasm": "^0.39.1",
     "classnames": "^2.3.2",
     "fflate": "^0.8.1",
     "google-protobuf": "^3.21.2",
-    "preact": "^10.17.1",
+    "preact": "^10.18.1",
     "valtio": "^1.11.2"
   },
   "devDependencies": {
-    "@types/google-protobuf": "^3.15.7",
-    "@types/node": "^20.6.5",
-    "@types/react": "^18.2.22",
-    "@types/react-dom": "^18.2.7",
-    "@types/react-transition-group": "^4.4.7",
-    "@unocss/cli": "^0.56.2",
-    "esbuild": "^0.19.3",
-    "unocss": "^0.56.2"
+    "@types/google-protobuf": "^3.15.9",
+    "@types/node": "^20.8.7",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
+    "@types/react-transition-group": "^4.4.8",
+    "@unocss/cli": "^0.56.5",
+    "esbuild": "^0.19.5",
+    "unocss": "^0.56.5"
   }
 }

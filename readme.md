@@ -1,4 +1,6 @@
-canvaskit 实现，超级丝滑的原神地图，数据来源：[空荧酒馆](https://yuanshen.site/docs/)。
+# 空荧酒馆原神地图
+
+超级丝滑的原神地图，数据来源：[空荧酒馆](https://yuanshen.site/docs/)。
 
 在线链接：
 
