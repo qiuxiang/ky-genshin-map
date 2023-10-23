@@ -75,6 +75,37 @@ export function unmark(marker: Marker) {
   localStorage.setItem("marked", JSON.stringify([...state.marked]));
 }
 
+export function exportData() {
+  const blob = new Blob([JSON.stringify([...state.marked])]);
+  const link = document.createElement("a");
+  link.style.display = "none";
+  link.href = URL.createObjectURL(blob);
+  link.download = `${new Date().toLocaleString()}.json`;
+  link.click();
+}
+
+export function importData() {
+  const input = document.createElement("input");
+  input.style.display = "none";
+  input.type = "file";
+  input.click();
+  input.onchange = ({ target }) => {
+    const { files } = target as HTMLInputElement;
+    if (files && files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const data = JSON.parse(reader.result as string);
+        if (state.marked.size > 0 && !confirm("是否覆盖当前数据")) {
+          return;
+        }
+        state.marked = proxySet(data);
+        localStorage.setItem("marked", JSON.stringify([...state.marked]));
+      };
+      reader.readAsText(files[0]);
+    }
+  };
+}
+
 async function init() {
   const marked = localStorage.getItem("marked");
   if (marked) {

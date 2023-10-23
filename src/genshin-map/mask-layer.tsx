@@ -19,7 +19,7 @@ class _MaskLayer extends Layer {
   }
 
   draw(canvas: Canvas) {
-    canvas.drawRect(this.map!.visibleRect, this._paint!);
+    canvas.drawRect(this.map!.rect, this._paint!);
   }
 }
 

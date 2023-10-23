@@ -23,7 +23,7 @@ export function GenshinMap() {
       key={mapInfo.getId()}
       canvaskit={canvaskit as CanvasKit}
       className="absolute w-full h-full bg-gray-900"
-      mapSize={[mapInfo.getWidth(), mapInfo.getHeight()]}
+      size={[mapInfo.getWidth(), mapInfo.getHeight()]}
       origin={[mapInfo.getOriginX(), mapInfo.getOriginY()]}
       maxZoom={1}
       onMove={onTilemapMove}

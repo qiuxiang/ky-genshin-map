@@ -1,6 +1,12 @@
+import {
+  ArrowDownTrayIcon,
+  DocumentIcon,
+  DocumentPlusIcon,
+} from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import { proxy, useSnapshot } from "valtio";
-import { activateArea, isApp, store } from "./store";
+import { exportData, importData } from "./genshin-map/state";
+import { activateArea, store } from "./store";
 
 interface AreaConfig {
   icon: string;
@@ -33,19 +39,35 @@ export function AreaPicker() {
     return null;
   }
 
+  const iconClassName = "w-8 h-8 md:w-10 md:h-10 text-white";
   return (
     <>
       <div
         className={classNames(
-          "absolute pointer-events-none w-full h-16 md:h-20 bg-gradient-to-b from-black/50 to-transparent",
-          isApp && "pt-[24px]"
+          "absolute pointer-events-none w-full h-16 md:h-20 bg-gradient-to-b from-black/50 to-transparent"
         )}
       />
       <div
         className={classNames(
+          "absolute h-16 md:h-20 flex items-center gap-4 ease-out duration-300",
+          visible ? "opacity-0 -left-20" : "opacity-100 left-4"
+        )}
+      >
+        <DocumentPlusIcon
+          className={iconClassName}
+          title="导入存档"
+          onClick={importData}
+        />
+        <ArrowDownTrayIcon
+          className={iconClassName}
+          title="导出存档"
+          onClick={exportData}
+        />
+      </div>
+      <div
+        className={classNames(
           "absolute h-16 md:h-20 flex items-center ease-out duration-300",
-          visible ? "opacity-0 -right-20" : "opacity-100 right-4",
-          isApp && "pt-[24px]"
+          visible ? "opacity-0 -right-20" : "opacity-100 right-4"
         )}
         onClick={toggleAreaPicker}
       >
@@ -80,8 +102,7 @@ export function AreaPicker() {
       <div
         className={classNames(
           "absolute w-full h-16 md:h-20 flex items-center justify-center ease-out duration-300",
-          visible ? "top-0 opacity-100" : "-top-20 md:-top-16 opacity-0",
-          isApp && "pt-[24px]"
+          visible ? "top-0 opacity-100" : "-top-20 md:-top-16 opacity-0"
         )}
         style={{
           background:
@@ -119,8 +140,7 @@ export function AreaPicker() {
         {visible && (
           <div
             className={classNames(
-              "absolute top-16 md:top-20 px-8 py-2 flex flex-wrap gap-2 justify-center",
-              isApp && "mt-[24px]"
+              "absolute top-16 md:top-20 px-8 py-2 flex flex-wrap gap-2 justify-center"
             )}
           >
             {activeTopArea.getChildList().map((subArea) => (

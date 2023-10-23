@@ -72,11 +72,10 @@ function UndergroundMapItem(props: UndergroundMapProps) {
   const chunks = useMemo(() => {
     return undergroundMap.getChildList().map((i) => {
       return i.getChunkList().map((chunk, index) => {
-        const image = new Image();
-        image.src = `underground/${i.getId()}_${index}.webp`;
+        const image = `underground/${i.getId()}_${index}.webp`;
         return (
           <ImageLayer
-            key={image.src}
+            key={image}
             zIndex={zIndex.underground + (i == current ? 1 : 0)}
             image={image}
             bounds={chunk.getBoundList()}
@@ -110,13 +109,16 @@ function UndergroundMapItem(props: UndergroundMapProps) {
     });
   }, [current]);
 
+  const active = undergroundMap
+    .getChildList()
+    .includes(activeUndergroundMap as UndergroundMap);
   const domLayerElement = useRef<HTMLDivElement>(null);
-  const hidden = zoomLevel < -2 && activeUndergroundMap == null;
+  const hidden = zoomLevel < -2 && !active;
   return (
     <>
       {chunks}
       {undergroundMap.getChildList().length > 1 && (
-        <DomLayer x={x} y={y} hidden={hidden}>
+        <DomLayer x={x} y={y} hidden={hidden} zIndex={1}>
           <div
             ref={domLayerElement}
             className={classNames(

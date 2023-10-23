@@ -7,8 +7,9 @@
     "dev": "esbuild build.ts --format=cjs | node - dev"
   },
   "dependencies": {
-    "@canvaskit-map/core": "^0.1.1",
-    "@canvaskit-map/react": "^0.1.1",
+    "@canvaskit-map/core": "^0.2.0",
+    "@canvaskit-map/react": "^0.2.0",
+    "@heroicons/react": "^2.0.18",
     "canvaskit-wasm": "^0.39.1",
     "classnames": "^2.3.2",
     "fflate": "^0.8.1",

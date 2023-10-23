@@ -7,7 +7,6 @@ import { proxy, ref } from "valtio";
 import { proxySet } from "valtio/utils";
 import { Area, AreaItem, MapData, MapInfo } from "./data_pb";
 
-export const isApp = navigator.userAgent.includes("app");
 export const store = proxy({
   canvaskit: null as unknown as CanvasKit,
   mapData: null as unknown as MapData,

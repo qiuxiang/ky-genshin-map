@@ -55,11 +55,7 @@ export function AreaItemLayer(props: AreaItemLayerProps) {
       }
     }
     return items;
-  }, [
-    activeMarker?.areaItem == props.areaItem && activeMarker,
-    markedVisible,
-    activeUndergroundMap,
-  ]);
+  }, [marked, markedVisible, activeUndergroundMap, activeMarker]);
 
   const commonProps = { ...props, onClick: activateMarker };
   const Component = borderlessNames.includes(props.areaItem.getName())
