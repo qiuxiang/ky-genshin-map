@@ -6,6 +6,7 @@ import { ActiveMarkerLayer } from "./active-marker-layer";
 import { AreaItemLayer } from "./area-item-layer";
 import { AreaNamesLayer } from "./area-names-layer";
 import { Settings } from "./settings";
+import { ShadowLayer } from "./shadow-layer";
 import { onTilemapClick, onTilemapMove, onTilemapReady } from "./state";
 import { TeleportLayer } from "./teleport-layer";
 import { UndergroundLayer } from "./underground-layer";
@@ -46,6 +47,7 @@ export function GenshinMap() {
       <UndergroundLayer />
       <TeleportLayer />
       <AreaNamesLayer />
+      <ShadowLayer />
     </CanvaskitMap>
   );
 }

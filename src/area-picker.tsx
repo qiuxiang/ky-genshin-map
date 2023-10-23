@@ -39,7 +39,7 @@ export function AreaPicker() {
     return null;
   }
 
-  const iconClassName = "w-8 h-8 md:w-10 md:h-10 text-white";
+  const iconClassName = "w-8 h-8 text-white";
   return (
     <>
       <div
