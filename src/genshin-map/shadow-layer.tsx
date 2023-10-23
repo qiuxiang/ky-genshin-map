@@ -16,8 +16,12 @@ class _ShadowLayer extends Layer {
       this.canvaskit!.Shader.MakeRadialGradient(
         [this.map!.size[0] / 2, this.map!.size[1] / 2],
         Math.max(...this.map!.size),
-        [this.canvaskit!.TRANSPARENT, this.canvaskit!.BLACK],
-        [0.1, 1],
+        [
+          this.canvaskit!.TRANSPARENT,
+          this.canvaskit!.TRANSPARENT,
+          this.canvaskit!.BLACK,
+        ],
+        [0, 0.3, 1],
         this.canvaskit!.TileMode.Clamp
       )
     );

@@ -27,7 +27,7 @@ export function TeleportLayer() {
           <AreaItemLayer key={i.getId()} areaItem={i} hidden={zoomLevel < -4} />
         ))}
         {teleports.map((i) => (
-          <AreaItemLayer key={i.getId()} areaItem={i} hidden={zoomLevel < -3} />
+          <AreaItemLayer key={i.getId()} areaItem={i} hidden={zoomLevel < -2} />
         ))}
       </>
     );
