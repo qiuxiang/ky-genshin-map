@@ -21,7 +21,7 @@ class _ShadowLayer extends Layer {
           this.canvaskit!.TRANSPARENT,
           this.canvaskit!.BLACK,
         ],
-        [0, 0.3, 1],
+        [0, 0.2, 1],
         this.canvaskit!.TileMode.Clamp
       )
     );
