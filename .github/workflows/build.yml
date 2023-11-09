@@ -12,7 +12,6 @@ jobs:
           pnpm i
           pnpm run init
           pnpm run build
-          cp images/favicon.png dist/
       - run: pnpm run build
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
