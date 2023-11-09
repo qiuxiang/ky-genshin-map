@@ -19,8 +19,8 @@
       </div>\
         <input type="text" name="fusername" class="form-control form-control-lg mb-3" placeholder="Username" required autofocus spellcheck="false" autocorrect="off" autocapitalize="off">\
         <input type="password" name="fpassword" class="form-control form-control-lg mb-3" placeholder="Password" required spellcheck="false">\
-      <input type="hidden" name="client_hash" value="bf3e88571488a86ca3ce3dbe78be09ba">\
-      <input type="hidden" name="sidx" value="505b1d28085dad468cb5d289eabe6cb0">\
+      <input type="hidden" name="client_hash" value="15cd8b6f8a9241d77d71219205721e63">\
+      <input type="hidden" name="sidx" value="1c2a7c1e84fd47458b08c09d395d2b1b">\
       <input type="submit" value="Login" class="btn btn-lg btn-files-light btn-login">\
     </form>';
     document.getElementsByTagName('form')[0].addEventListener('submit', function(){
