@@ -20,9 +20,7 @@ export const store = proxy({
 async function init() {
   const [response, canvaskit] = await Promise.all([
     fetch(
-      location.protocol == "http:"
-        ? "http://ky-genshin-map.test.upcdn.net/data.gz"
-        : "https://ky-genshin-map-1253179036.cos.ap-nanjing.myqcloud.com/data.gz"
+      "https://ky-genshin-map-1253179036.cos.ap-nanjing.myqcloud.com/data-4.2.0.gz"
     ),
     initCanvaskit({
       locateFile() {
