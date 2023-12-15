@@ -10,7 +10,7 @@
     "@canvaskit-map/core": "^0.2.0",
     "@canvaskit-map/react": "^0.2.0",
     "@heroicons/react": "^2.0.18",
-    "canvaskit-wasm": "^0.39.1",
+    "canvaskit-wasm": "^0.38.2",
     "classnames": "^2.3.2",
     "fflate": "^0.8.1",
     "google-protobuf": "^3.21.2",
