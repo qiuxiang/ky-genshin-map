@@ -5,7 +5,6 @@
 在线链接：
 
 - https://qiuxiang.github.io/ky-genshin-map/ (github pages)
-- http://ky-genshin-map.7c00.cc/
 - http://qiuxiang.gitee.io/ky-genshin-map/ (gitee pages)
 
 ![图片](https://github.com/qiuxiang/ky-genshin-map/assets/1709072/2ea4b8e7-1978-4b95-a353-cc712a01b21e)
