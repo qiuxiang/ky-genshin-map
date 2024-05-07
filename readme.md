@@ -5,7 +5,7 @@
 在线链接：
 
 - https://qiuxiang.github.io/ky-genshin-map/ (github pages)
-- http://qiuxiang.gitee.io/ky-genshin-map/ (gitee pages)
+- https://ky-genshin-map-1253179036.cos-website.ap-nanjing.myqcloud.com (腾讯云 COS)
 
 ![图片](https://github.com/qiuxiang/ky-genshin-map/assets/1709072/2ea4b8e7-1978-4b95-a353-cc712a01b21e)
 
