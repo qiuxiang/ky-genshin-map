@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "init": "curl https://github.com/qiuxiang/ky-genshin-map/files/15228849/data.tar.gz -Lo data.tar.gz && tar xf data.tar.gz && mv dist/data* src/ && ln index.html dist/ && cp images/favicon.png dist/",
+    "init": "curl https://github.com/user-attachments/files/16885651/data.tar.gz -Lo data.tar.gz && tar xf data.tar.gz && mv dist/data* src/ && ln index.html dist/ && cp images/favicon.png dist/",
     "uno": "unocss -o dist/uno.css 'src/**/*.tsx' index.html",
     "build": "esbuild build.ts --format=cjs | node",
     "dev": "esbuild build.ts --format=cjs | node - dev"

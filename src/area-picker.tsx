@@ -1,6 +1,5 @@
 import {
   ArrowDownTrayIcon,
-  DocumentIcon,
   DocumentPlusIcon,
 } from "@heroicons/react/24/outline";
 import classNames from "classnames";
@@ -19,6 +18,7 @@ const areas: Record<string, AreaConfig> = {
   稻妻: { icon: require("../images/inazuma.png"), color: "#9360ff" },
   须弥: { icon: require("../images/sumeru.png"), color: "#afff60" },
   枫丹: { icon: require("../images/fontaine.png"), color: "#52e5ff" },
+  纳塔: { icon: require("../images/natlan.png"), color: "#fa4a4a" },
 };
 
 const state = proxy({ visible: false });
